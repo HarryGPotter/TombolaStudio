@@ -1,0 +1,77 @@
+##$#TombolaLib;1.1;CSV_PACKED_PLUS
+#
+# TombolaLib 1.1
+# File description: Card Series manually imported from Tombolissima Clementoni 48
+# Creation timestamp: 2020/03/27 09:49:38
+# File Format: CSV_PACKED_PLUS. Use of Jolly numbers: ON
+# 8 Series (48 cards)
+# Card generation tecnique: null
+# Card set generation heuristic: null
+#
+CardLabel;Num0;Num1;Num2;Num3;Num4;Num5;Num6;Num7;Num8;Num9;Num10;Num11;Num12;Num13;Num14;JollyIndex;MaxEqualPerCard;MaxEqualPerRow;
+"Tombolissima Clementoni 01";01;22;52;69;71;09;11;36;55;77;19;24;46;64;87;(11);06;03;
+"Tombolissima Clementoni 02";15;30;57;74;84;16;27;49;65;88;02;18;34;58;75;(03);05;02;
+"Tombolissima Clementoni 03";23;41;67;76;81;03;25;48;50;82;10;33;60;79;90;(12);05;03;
+"Tombolissima Clementoni 04";04;32;42;61;86;12;20;45;51;70;07;21;35;56;63;(11);07;02;
+"Tombolissima Clementoni 05";13;31;53;78;80;05;17;37;44;66;08;28;38;54;72;(13);06;03;
+"Tombolissima Clementoni 06";06;29;40;62;83;26;43;59;73;85;14;39;47;68;89;(07);05;02;
+#
+"Tombolissima Clementoni 07";11;21;46;64;89;15;32;56;71;83;09;25;49;67;77;(11);06;02;
+"Tombolissima Clementoni 08";12;31;42;61;74;04;29;47;69;88;17;39;51;79;90;(13);05;02;
+"Tombolissima Clementoni 09";10;22;45;63;81;07;20;33;53;75;13;38;59;68;86;(12);05;02;
+"Tombolissima Clementoni 10";02;24;40;62;85;18;35;50;72;87;05;28;41;57;78;(13);06;02;
+"Tombolissima Clementoni 11";06;26;34;54;70;19;37;58;60;82;08;23;48;65;84;(11);06;02;
+"Tombolissima Clementoni 12";01;14;30;52;73;03;27;44;55;76;16;36;43;66;80;(02);05;02;
+#
+"Tombolissima Clementoni 13";20;31;54;63;88;18;39;56;65;76;02;25;43;59;69;(05);06;02;
+"Tombolissima Clementoni 14";01;23;48;61;80;04;11;27;68;89;07;15;37;57;75;(04);05;02;
+"Tombolissima Clementoni 15";10;33;64;71;83;06;24;38;58;74;12;21;45;78;86;(07);06;03;
+"Tombolissima Clementoni 16";03;13;47;52;82;09;14;35;53;79;19;29;40;55;60;(11);05;02;
+"Tombolissima Clementoni 17";05;32;44;66;81;26;41;51;72;84;17;36;46;77;90;(01);05;03;
+"Tombolissima Clementoni 18";22;30;50;70;85;16;28;42;62;87;08;34;49;67;73;(10);06;02;
+#
+"Tombolissima Clementoni 19";24;39;53;62;87;17;30;55;64;75;01;29;41;58;68;(01);05;03;
+"Tombolissima Clementoni 20";03;22;46;60;88;06;10;26;67;89;09;14;38;56;74;(03);07;03;
+"Tombolissima Clementoni 21";11;34;63;70;82;05;20;37;57;73;19;23;44;77;85;(08);06;02;
+"Tombolissima Clementoni 22";02;12;43;51;80;08;13;36;52;78;18;28;47;54;69;(05);06;02;
+"Tombolissima Clementoni 23";04;31;40;65;81;25;45;50;71;83;16;35;49;76;86;(11);05;02;
+"Tombolissima Clementoni 24";21;33;59;72;84;15;27;42;61;90;07;32;48;66;79;(06);05;02;
+#
+"Tombolissima Clementoni 25";04;21;44;63;86;09;27;30;54;75;12;33;59;69;90;(11);05;02;
+"Tombolissima Clementoni 26";13;34;42;67;80;19;39;52;73;87;06;22;45;55;79;(12);06;02;
+"Tombolissima Clementoni 27";14;23;41;62;81;18;37;56;78;82;02;24;48;66;88;(08);07;03;
+"Tombolissima Clementoni 28";07;25;40;68;85;11;36;51;70;89;15;29;46;53;74;(11);05;03;
+"Tombolissima Clementoni 29";01;26;43;61;84;03;16;31;58;71;05;28;35;64;76;(14);05;03;
+"Tombolissima Clementoni 30";10;32;50;72;83;08;20;47;60;77;17;38;49;57;65;(05);07;02;
+#
+"Tombolissima Clementoni 31";10;31;43;66;83;01;22;32;54;71;15;29;47;59;74;(01);05;03;
+"Tombolissima Clementoni 32";14;34;52;60;80;05;23;42;73;85;17;37;46;67;88;(08);06;02;
+"Tombolissima Clementoni 33";06;24;44;61;82;11;38;53;72;90;09;28;49;68;79;(08);05;02;
+"Tombolissima Clementoni 34";16;21;33;51;75;03;25;45;64;81;07;19;39;55;78;(04);08;03;
+"Tombolissima Clementoni 35";02;20;40;63;70;12;35;56;69;84;04;26;48;58;76;(01);07;02;
+"Tombolissima Clementoni 36";13;30;50;62;86;18;36;57;77;87;08;27;41;65;89;(08);06;02;
+#
+"Tombolissima Clementoni 37";18;33;42;68;86;05;21;34;50;72;19;26;47;55;73;(01);05;02;
+"Tombolissima Clementoni 38";10;22;40;62;88;04;14;36;56;77;06;25;48;63;89;(10);07;02;
+"Tombolissima Clementoni 39";13;32;53;74;81;08;24;49;60;83;15;35;57;65;90;(13);07;04;
+"Tombolissima Clementoni 40";03;20;41;61;71;09;27;46;51;66;11;39;54;75;87;(12);05;02;
+"Tombolissima Clementoni 41";17;30;43;64;85;02;23;38;59;76;07;28;45;67;78;(12);04;03;
+"Tombolissima Clementoni 42";12;31;52;70;80;01;29;44;69;82;16;37;58;79;84;(02);05;02;
+#
+"Tombolissima Clementoni 43";04;24;35;54;71;08;27;44;67;80;17;38;48;59;82;(10);06;02;
+"Tombolissima Clementoni 44";01;20;34;61;84;11;25;47;62;73;09;15;29;52;79;(06);05;03;
+"Tombolissima Clementoni 45";14;23;42;65;87;18;31;50;66;70;02;37;49;56;75;(04);07;02;
+"Tombolissima Clementoni 46";16;33;51;72;85;07;26;45;63;89;19;39;57;64;77;(02);08;03;
+"Tombolissima Clementoni 47";12;32;53;74;81;05;21;40;78;86;06;28;43;68;90;(05);06;04;
+"Tombolissima Clementoni 48";10;30;55;60;83;13;36;41;69;88;03;22;46;58;76;(10);06;03;
+#
+#  2 cards have  8 numbers equal to another card
+#  8 cards have  7 numbers equal to another card
+# 16 cards have  6 numbers equal to another card
+# 21 cards have  5 numbers equal to another card
+#  1 cards have  4 numbers equal to another card
+#  2 cards have at least a row with  4 numbers equal to a row in an another card
+# 16 cards have at least a row with  3 numbers equal to a row in an another card
+# 30 cards have at least a row with  2 numbers equal to a row in an another card
+#
+# END OF CARD FILE
