@@ -233,7 +233,7 @@ public class TFileFormatter {
         //  standard output or error?
         Path path = Paths.get(fileName);
         BufferedWriter bw = Files.newBufferedWriter(path, standard_charset, options);
-        if (!this.getSkipComments()) {
+        if (!this.getSkipComments() && writeFmt != TCardFormat.MSWORD_MAILMARGE){
             bw.write(autoDetectSequence + TUtils.LIB_NAME + csv_delimiter + TUtils.LIB_VERSION + csv_delimiter + format + "\n");
             bw.write(commentPrefix + "\n");
             bw.write(String.format("%s %s %s%n", commentPrefix, TUtils.LIB_NAME, TUtils.LIB_VERSION));
@@ -264,7 +264,7 @@ public class TFileFormatter {
             }
             result++;
         }
-        if (!this.getSkipComments()) {
+        if (!this.getSkipComments() && writeFmt != TCardFormat.MSWORD_MAILMARGE) {
             bw.write(commentPrefix + "\n");
             bw.write(String.format("%s Series generator random seed: %,d%n", commentPrefix, cardSet.getMakeSixSeed()));
             bw.write(String.format("%s Generation heuristic approximately took %s%n", commentPrefix, TUtils.prettyMilliseconds(cardSet.getCreationElapsedMillis())));

@@ -288,6 +288,8 @@ public class TCardFormatter {
                 return prettyStringFromCard(card);
             case SQL:
                 return sqlStringFromCard(card, cardId, cardSetId, jollyOn, true);
+            case MSWORD_MAILMARGE:
+                return csv4WordStringFromCard(card, jollyOn, false);
             //TODO(2.0) XML, JSON, ASCII_ART?...
         }
         return "UNSUPPORTED JET";
@@ -395,7 +397,7 @@ public class TCardFormatter {
     String prepareHeader(TCardFormat format) {
         StringBuilder sb = new StringBuilder();
         sb.append("CardLabel").append(csv_delimiter);
-        if (format == TCardFormat.CSV || format == TCardFormat.CSV_PLUS) {
+        if (format == TCardFormat.CSV || format == TCardFormat.CSV_PLUS || format == TCardFormat.MSWORD_MAILMARGE) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 9; j++) {
                     sb.append("NumR").append(i).append("C").append(j).append(csv_delimiter);
@@ -403,15 +405,19 @@ public class TCardFormatter {
             }
         } else if (format == TCardFormat.CSV_PACKED || format == TCardFormat.CSV_PACKED_PLUS) {
             for (int i = 0; i < 15; i++) {
-                sb.append("Num" + i + csv_delimiter);
+                sb.append("Num").append(i).append(csv_delimiter);
             }
         }
         if (this.useJolly) {
-            sb.append("JollyIndex" + csv_delimiter);
+            if (format == TCardFormat.MSWORD_MAILMARGE) {
+                sb.append("JollyNumber").append(csv_delimiter);
+            } else {
+                sb.append("JollyIndex").append(csv_delimiter);
+            }
         }
         if (format == TCardFormat.CSV_PLUS || format == TCardFormat.CSV_PACKED_PLUS) {
-            sb.append("MaxEqualPerCard" + csv_delimiter);
-            sb.append("MaxEqualPerRow" + csv_delimiter);
+            sb.append("MaxEqualPerCard").append(csv_delimiter);
+            sb.append("MaxEqualPerRow").append(csv_delimiter);
         }
         return sb.toString();
     }
@@ -500,11 +506,45 @@ public class TCardFormatter {
         }
         sb.append(sql_field_delimiter).append(numbers).append(sql_field_delimiter).append(sql_delimiter).append(" ");
         sb.append(sql_field_delimiter).append("0").append(sql_field_delimiter).append(sql_delimiter).append(" ");
-        sb.append(sql_field_delimiter).append(card.evaluateCheckSum(0)).append(sql_field_delimiter).append(" ");
-        sb.append(sql_field_delimiter).append(card.getCurrentMaxEPC()).append(sql_field_delimiter).append(" ");
-        sb.append(sql_field_delimiter).append(card.getCurrentMaxEPR()).append(sql_field_delimiter).append(" ");
+        sb.append(sql_field_delimiter).append(card.evaluateCheckSum(0)).append(sql_field_delimiter).append(sql_delimiter).append(" ");
+        sb.append(sql_field_delimiter).append(card.getCurrentMaxEPC()).append(sql_field_delimiter).append(sql_delimiter).append(" ");
+        sb.append(sql_field_delimiter).append(card.getCurrentMaxEPR()).append(sql_field_delimiter);
         // Tra le altre cose manca la creation date
         sb.append(");");
+        return sb.toString();
+    }
+
+    private String csv4WordStringFromCard(TCard card, boolean jollyOn, boolean extraInfo) {
+        if (card == null) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(string_delimiter).append(card.getLabel()).append(string_delimiter).append(csv_delimiter);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 9; j++) {
+                String formatStr = NUM_FMT + csv_delimiter;
+                if (card.getExtractionCheckCount() > 0) {
+                    if (card.isMatched(card.getNumber(i, j))) {
+                        formatStr = NUM_EXTRACTED_FMT + csv_delimiter;
+                        if (card.isJolly(i, j) && this.useJolly) {
+                            formatStr = JOLLY_EXTRACTED_FMT + csv_delimiter;
+                        }
+                    } else {
+                        if (card.getLinearIndex(i, j) == card.getJollyIndex() && this.useJolly) {
+                            formatStr = JOLLY_FMT + csv_delimiter;
+                        }
+                    }
+                }
+                sb.append(String.format(formatStr, card.getNumber(i, j)));
+            }
+        }
+        if (jollyOn) {
+            sb.append(String.format(NUM_FMT, card.getNumber(card.getJollyIndex()))).append(csv_delimiter);
+        }
+        if (extraInfo) {
+            sb.append(String.format(NUM_FMT, card.getCurrentMaxEPC())).append(csv_delimiter);
+            sb.append(String.format(NUM_FMT, card.getCurrentMaxEPR())).append(csv_delimiter);
+        }
         return sb.toString();
     }
 
