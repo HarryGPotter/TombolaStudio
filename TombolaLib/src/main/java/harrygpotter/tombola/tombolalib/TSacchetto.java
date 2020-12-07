@@ -186,8 +186,12 @@ public class TSacchetto {
     }
     
     /**
-     * TODO(1.1) Eliminate becaouse we have better
-     * @return 
+     * Return a List containing the numbers already extracted from the
+     * sacchetto, in the same order by which they come out from the ballot box,
+     * return null if no number has been already extracted.
+     *
+     * @return a List object containing the numbers already extracted from the
+     * sacchetto, null if no number has been already extracted
      */
     public List<Integer> getExtractedAsList() {
         ArrayList<Integer> extracted = new ArrayList<>();

@@ -41,8 +41,8 @@ public interface ILogger {
      * to Ilogger instances, in order to prioritize them and decide if they must
      * be logged or not based on the log level set for each logger.
      */
-    static enum TLogLevel {
-        FAT, ERR, WAR, GEV, GIN, INF, VER
+    public static enum TLogLevel {
+        FAT, ERR, WIN, CAN, WAR, INF, VER
     }
 
     /**
@@ -112,5 +112,15 @@ public interface ILogger {
      * @param msg The text message you want to log.
      */
     void log(TLogLevel level, String msg);
+    
+    /**
+     * TODO(1.1) Write comments here
+     * @param level
+     * @param gameId
+     * @param count
+     * @param extracted
+     * @param msg 
+     */
+    void gameLog(TLogLevel level, String gameId, int count, int extracted, String msg);
 
 }           // End Of File - Rel.(1.1)

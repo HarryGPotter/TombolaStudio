@@ -51,10 +51,10 @@ public class TGame implements Serializable {
     private int lastMatchsXExtraction = 0;
     private long ts_start, ts_end;
     
-    // TODO(1.1) Describe winVector[i][j]    
+    // TODO(2.0) Describe winVector[i][j]    
     private final int[][] winVector = new int[6][90];
     
-    // TODO(1.1) Describe conflictvector[i][j]
+    // TODO(2.0) Describe conflictvector[i][j]
     // conflictVector[i] is 0 if there are no conflicts, otherwise the amount of candidates for the same award resulting at the i-th extraction
     private final int[][] conflictVector = new int[6][90];
     
@@ -446,13 +446,15 @@ public class TGame implements Serializable {
     public synchronized TGameResultCode extractNumber(int number) {
         if (status == TGameStatus.RESOLVING) {
             // We cannot do nothing, just wait that resolveCandidates() make its job.
-            logger.warning(gameLogEntry("Attention! New number NOT extracted. You have to solve the contention before continue playing."));
+            logger.gameLog(ILogger.TLogLevel.WAR, gameID, exCount, lastEx,
+                    "Attention! New number NOT extracted. You have to solve the contention before continue playing");
             lastResultCode = TGameResultCode.MULTICANDIDATES;
             return lastResultCode;
         }        
         if (status == TGameStatus.ENDED) {
             // Les jeux sont faits, rien ne va plus
-            logger.warning(gameLogEntry("Attention! Game is OVER! Do not try to extract other numbers... come on..."));
+            logger.gameLog(ILogger.TLogLevel.WAR, gameID, exCount, lastEx,
+                    "Attention! Game is OVER! Do not try to extract other numbers... come on...");
             lastResultCode = TGameResultCode.GAME_OVER;
             return lastResultCode;
         }        
@@ -461,7 +463,8 @@ public class TGame implements Serializable {
             return lastResultCode;
         }
         if (number < 0 || number > 90) {                        // Number out of range
-            logger.error(gameLogEntry("Attention! Extracted number is out of range, that's impossible."));
+            logger.gameLog(ILogger.TLogLevel.ERR, gameID, exCount, lastEx,
+                    "Attention! Extracted number is out of range, that's impossible");
             lastResultCode = TGameResultCode.WRONG_NUMBER;
             return lastResultCode;
         }
@@ -472,7 +475,8 @@ public class TGame implements Serializable {
             extracted = sacchetto.manuallyExtract(number);
         }
         if (extracted == -1) {
-            logger.error(gameLogEntry("Number, " + number + " has already been checked before, no action or control performed."));
+            logger.gameLog(ILogger.TLogLevel.ERR, gameID, exCount, lastEx,
+                    String.format("Number %2d had already been checked before, no action or control performed", number));
             lastResultCode = TGameResultCode.ALREADY_CHECKED;                      // Number already extracted
             return lastResultCode;
         }
@@ -492,12 +496,17 @@ public class TGame implements Serializable {
         if (exCount == 0) {
             // This is the first extracted number of the game...
             this.ts_start = System.currentTimeMillis();
-            logger.info(gameLogEntry("--------------------------------------------------"));
-            logger.info(gameLogEntry(String.format("Ok guys, let's start the game! The match <%s> is warming up!", this.gameID)));
+            logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+                    "--------------------------------------------------");
+            logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+                    String.format("Ok guys, let's start the game! The match <%s> is warming up!", this.gameID));
+
             if (gamingBillboard) {
-                logger.info(gameLogEntry("Billboard cards are going to participate to the game."));
+                logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+                    "Billboard cards are going to participate to the game");
             } else {
-                logger.info(gameLogEntry("Billboard cards are going to NOT participate to the game."));
+                logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+                    "Billboard cards are going to NOT participate to the game");
             }
 // TODO(2.0)
 //            if (funFactsEval != null) {
@@ -506,7 +515,8 @@ public class TGame implements Serializable {
         }
         exCount++;
         lastEx = extracted;
-        logger.info(gameLogEntry(String.format("Number <<%2d>> has been extracted", extracted)));
+        logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+            String.format("Number <<%2d>> has been extracted", extracted));
 
         // Step 0: All lists of cards candidate to be appointed an award are cleaned
         awards.forEach(aw -> aw.getCandidatesList().clear());
@@ -531,14 +541,16 @@ public class TGame implements Serializable {
                         } else {
                             owner = "";
                         }
-                        logger.info(gameLogEntry("Card <<" + c.getLabel() + ">>" + owner + " is candidate to the award <<" + aw.getLabel() + ">>"));
-                        // !!! Very important "break" instruction: so this card cannot participate to other award check whitin this same xtraction.
+                        logger.gameLog(ILogger.TLogLevel.CAN, gameID, exCount, lastEx,
+                            String.format("Card <<%s>> Owned by %s is candidate to the award <<%s>>", c.getLabel(), owner, aw.getLabel()));
+                        // !!! Very important "break" instruction: so this card cannot participate to other award check whitin this same extraction.
                         break;
                     }
                 }
             }
         }
-        //logger.verbose(gameLogEntry(String.format("%d cards out of %d have matched the extracted number.",lastMatchsXExtraction, gamingCards.size())));
+        logger.gameLog(ILogger.TLogLevel.VER, gameID, exCount, lastEx,
+            String.format("%d cards out of %d have matched the extracted number.",lastMatchsXExtraction, gamingCards.size()));
 
         // Step 2: Assign award where there is JUST ONE candidate card.
         for (TAward aw : awards) {
@@ -555,7 +567,7 @@ public class TGame implements Serializable {
                 if (winner.hasLastScoreUsedJolly()) {
                     logRecord += " using Jolly";
                 }
-                logger.info(gameLogEntry(logRecord));
+                logger.gameLog(ILogger.TLogLevel.WIN, gameID, exCount, lastEx, logRecord);
                 aw.setStatus(TAward.TAwardStatus.ASSIGNED);
                 int index = 0;
                 if (aw.getCategory()<6) {
@@ -589,7 +601,8 @@ public class TGame implements Serializable {
                 }
                 conflictVector[index][exCount - 1] += (numCandidates-1);
                 conflictVector[5][exCount - 1] += (numCandidates-1);
-                logger.info(gameLogEntry("Award <<" + aw.getLabel() + ">> has " + numCandidates + " candidates. Resolver needed before extract other numbers."));
+                logger.gameLog(ILogger.TLogLevel.CAN, gameID, exCount, lastEx,
+                    String.format("Award <<%s>> has %d candidates. Resolution is needed before drawing next number", aw.getLabel(), numCandidates));
                 thereAreContenders = true;
             }
         }
@@ -602,7 +615,8 @@ public class TGame implements Serializable {
         if (this.isGameOver()) {
             this.status = TGameStatus.ENDED;
             this.ts_end = System.currentTimeMillis();
-            logger.info(gameLogEntry(String.format("Congratulations my dear, Tombola Game <<%s>> is over after %s. Thanks a lot and see you again.", gameID, TUtils.prettyMilliseconds(this.getElapsedTime()))));
+            logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+                String.format("Congratulations my dear, Tombola Game <<%s>> is over after %s. Thanks a lot and see you again", gameID, TUtils.prettyMilliseconds(this.getElapsedTime())));
             this.lastResultCode = TGameResultCode.GAME_OVER;
             return this.lastResultCode;
         }
@@ -704,7 +718,8 @@ public class TGame implements Serializable {
     public TGameResultCode resolveCandidates(int[] winnerIndexes) {
         TGameResultCode resolveResult = TGameResultCode.WINNER;
         if (this.status != TGameStatus.RESOLVING) {
-            logger.error(String.format("On game <<%s>> someone is trying to resulve an award contention that does not exist!", gameID));
+            logger.gameLog(ILogger.TLogLevel.ERR, gameID, exCount, lastEx,
+                String.format("On game <<%s>> someone is trying to resolve an award contention that does not exist!", gameID));
             this.lastResultCode = TGameResultCode.NOT_RESOLVING;
             return this.lastResultCode;
         }
@@ -717,13 +732,13 @@ public class TGame implements Serializable {
                 aw.getWinnerList().add(aw.getCandidatesList().get(j));
                 aw.getWithJollyList().add(aw.getCandidatesList().get(j).hasLastScoreUsedJolly());
                 aw.getCandidatesList().remove(j);
-                logger.info(gameLogEntry("User has resolved in favor of card <<" + aw.getWinnerList().get(winIdx).getLabel() + ">>"));
-
+                logger.gameLog(ILogger.TLogLevel.CAN, gameID, exCount, lastEx,
+                    String.format("User has resolved in favor of card <<%s>>", aw.getWinnerList().get(winIdx).getLabel()));
                 String logRecord = "Award <<" + aw.getLabel() + ">> has been won by card <<" + aw.getWinnerList().get(winIdx).getLabel() + ">> ";
                 if (aw.getWinnerList().get(winIdx).hasLastScoreUsedJolly()) {
                     logRecord += "Using Jolly ";
                 }
-                logger.info(gameLogEntry(logRecord));
+                logger.gameLog(ILogger.TLogLevel.WIN, gameID, exCount, lastEx, logRecord);
                 winIdx++;
             }
             aw.setStatus(TAward.TAwardStatus.ASSIGNED);
@@ -750,11 +765,12 @@ public class TGame implements Serializable {
                     awards.get(i + 1).getCandidatesList().addAll(aw.getCandidatesList());
                     awards.get(i + 1).setStatus(TAward.TAwardStatus.CONTENDED);
                     for (TCard c : awards.get(i + 1).getCandidatesList()) {
-                        logger.info(gameLogEntry("Card <<" + c.getLabel() + ">> has been moved as candidate to the award <<" + awards.get(i + 1).getLabel() + ">>"));
+                        logger.gameLog(ILogger.TLogLevel.CAN, gameID, exCount, lastEx, 
+                                String.format("Card <<%s>> has been moved as candidate to the award <<%s>>", c.getLabel(), awards.get(i + 1).getLabel() ));
                     }
                     resolveResult = TGameResultCode.MULTICANDIDATES;
                 } else {
-                    // Here it can be supposed the candidate list contains just one card
+                    // Here we can be supposed that candidate list contains just one card
                     awards.get(i + 1).getWinnerList().add(aw.getCandidatesList().get(0));
                     awards.get(i + 1).getWithJollyList().add(aw.getCandidatesList().get(0).hasLastScoreUsedJolly());
                     awards.get(i + 1).setStatus(TAward.TAwardStatus.ASSIGNED);
@@ -774,12 +790,12 @@ public class TGame implements Serializable {
                     if (awards.get(i + 1).getWinnerList().get(0).hasLastScoreUsedJolly()) {
                         logRecord2 += "Using Jolly ";
                     }
-                    logger.info(gameLogEntry(logRecord2));
+                    logger.gameLog(ILogger.TLogLevel.WIN, gameID, exCount, lastEx, logRecord2);
                 }
             }
             aw.getCandidatesList().clear();
         } else {
-            logger.error(gameLogEntry("Too many proposed winners to this award!"));
+            logger.gameLog(ILogger.TLogLevel.ERR, gameID, exCount, lastEx, "Too many winners proposed to this award!");
         }
 
         if (resolveResult == TGameResultCode.WINNER) {
@@ -797,7 +813,8 @@ public class TGame implements Serializable {
         if (this.isGameOver()) {
             this.status = TGameStatus.ENDED;
             this.ts_end = System.currentTimeMillis();
-            logger.info(gameLogEntry(String.format("Congratulation my dears, Tombola Game <%s> is Over after %s. Thanks you and see you again.", gameID, TUtils.prettyMilliseconds(this.getElapsedTime()))));
+            logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+                    String.format("Congratulation my dears, Tombola Game <%s> is Over after %s. Thanks you and see you again.", gameID, TUtils.prettyMilliseconds(this.getElapsedTime())));
             this.lastResultCode = TGameResultCode.GAME_OVER;
             return this.lastResultCode;
         }
@@ -825,19 +842,23 @@ public class TGame implements Serializable {
             this.lastResultCode = TGameResultCode.WRONG_NUMBER;
             return this.lastResultCode;
         }
-        logger.info(gameLogEntry(String.format("Oh my God, that's a twist! We're going to rollback the last extraction. Number %d is going back into the ballot box.", lastEx)));
+        logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+            String.format("Oh my God, that's a twist! We're going to rollback the last extraction. Number %d is going back into the ballot box.", lastEx));
         // Step 1: Roolback the last number from all playing cards
         int cardCount = 0;
         for (TCard c : gamingCards) {
             int result = c.uncheckExtraction(lastEx);
             if (result == -2) {
-                logger.warning(gameLogEntry(String.format("It seemes that on card <<%s>> owned by <<%s>> the number %d is present but not already marked. It was a mistake?", c.getLabel(), c.getOwner(), lastEx)));
+                logger.gameLog(ILogger.TLogLevel.WAR, gameID, exCount, lastEx,
+                    String.format("It seemes that on card <<%s>> owned by <<%s>> the number %d is present but not already marked. It was a mistake?", c.getLabel(), c.getOwner(), lastEx));
             } else if (result >= 0) {
-                logger.verbose(gameLogEntry(String.format("Last extracted number, %d, has been rolled back on card <<%s>> owned by <<%s>>", lastEx, c.getLabel(), c.getOwner())));
+                logger.gameLog(ILogger.TLogLevel.VER, gameID, exCount, lastEx,
+                    String.format("Last extracted number, %d, has been rolled back on card <<%s>> owned by <<%s>>", lastEx, c.getLabel(), c.getOwner()));
                 cardCount++;
             }
         }
-        logger.info(gameLogEntry(String.format("Number %d has been unmarked on %d cards out of %d total playing cards.", lastEx, cardCount, gamingCards.size())));
+        logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+            String.format("Number %d has been unmarked on %d cards out of %d total playing cards", lastEx, cardCount, gamingCards.size()));
 
         // Step 2: Eventually Undo assiged / deciding awards with the last number
         for (TAward aw : awards) {
@@ -848,7 +869,8 @@ public class TGame implements Serializable {
                     aw.setWinningNumber(-1);
                     aw.setWinningOrdinal(-1);
                     for (TCard w : aw.getWinnerList()) {
-                        logger.info(gameLogEntry(String.format("Award <<%s>> is available again. Sorry card <<%s>> owned by <<%s>>, you have to give it back now.", aw.getLabel(), w.getLabel(), w.getOwner())));
+                        logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+                            String.format("Award <<%s>> is available again. Sorry card <<%s>> owned by <<%s>>, you have to give it back now.", aw.getLabel(), w.getLabel(), w.getOwner()));
                     }
                     aw.getWinnerList().clear();
                 }
@@ -857,7 +879,8 @@ public class TGame implements Serializable {
                     aw.setWinningNumber(-1);
                     aw.setWinningOrdinal(-1);
                     for (TCard c : aw.getCandidatesList()) {
-                        logger.info(gameLogEntry(String.format("Award <<%s>> is no more contended by card <<%s>> owned by <<%s>>", aw.getLabel(), c.getLabel(), c.getOwner())));
+                        logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+                            String.format("Award <<%s>> is no more contended by card <<%s>> owned by <<%s>>", aw.getLabel(), c.getLabel(), c.getOwner()));
                     }
                     aw.getCandidatesList().clear();
                 }
@@ -874,7 +897,8 @@ public class TGame implements Serializable {
         sacchetto.rollBack();
         int temp = lastEx;
         lastEx = sacchetto.getLastExtracted();
-        logger.info(String.format("Now everithing has been restored as %d has never been extracted, I hope!", temp));
+        logger.gameLog(ILogger.TLogLevel.INF, gameID, exCount, lastEx,
+            String.format("Now everithing has been restored as %d has never been extracted, I hope!", temp));
         // TODO(2.0) Verify the return codes. Maybe it is preferable to use new and ad hoc TGame statuses...
         this.lastResultCode = TGameResultCode.NOWINNER;
         return this.lastResultCode;

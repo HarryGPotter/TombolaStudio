@@ -95,7 +95,7 @@ public enum TCardFormat {
     SQL,
     
     /**
-     * TODO(1.2)
+     * TODO(1.2) Write comment here
      * The file aims to be ready to be used within a Microsoft Word template leveraging
      * its "mail merge" functionalities. To achieve this goal the file has an heading line 
      * with columns (fields) names, 27 numbers for each card (so, putting zeros where 

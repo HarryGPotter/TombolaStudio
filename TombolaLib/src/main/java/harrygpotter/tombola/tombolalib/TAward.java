@@ -109,7 +109,7 @@ public class TAward implements Serializable {
      * Instantiate an award for a game. You have just to name it and associate a
      * category to it.
      *
-     * @param name The symbolic label identifying the award (you can use "AMBO",
+     * @param label The symbolic label identifying the award (you can use "AMBO",
      * "TERNO", etc.).
      * @param category The integral score associated to each prize (2 = AMBO, 3 =
      * TERNO, ..., 15 = TOMBOLA). Valid values are within the [2,15] range.
@@ -127,7 +127,7 @@ public class TAward implements Serializable {
      * Instantiate an award for a game. You have just to name it and associate a
      * category to it.
      *
-     * @param name The symbolic label identifying the award (you can use "AMBO",
+     * @param label The symbolic label identifying the award (you can use "AMBO",
      * "TERNO", etc.).
      * @param category The integral score associated to each prize (2 = AMBO, 3 =
      * TERNO, ..., 15 = TOMBOLA). Valid values are within the [2,15] range.

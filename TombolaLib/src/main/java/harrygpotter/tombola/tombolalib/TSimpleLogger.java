@@ -206,6 +206,28 @@ public class TSimpleLogger implements ILogger {
     }
 
     /**
+     * TODO(1.1) Write comment here.
+     * @param level
+     * @param gameId
+     * @param count
+     * @param extracted
+     * @param msg 
+     */
+    @Override
+    public void gameLog(TLogLevel level, String gameId, int count, int extracted, String msg) {
+        if (logStream == null) {
+            return;
+        }
+        if (level.ordinal() <= this.logLevel.ordinal()) {
+        // [Timestamp] [level] [gameid] [counter] [extracted] [message]
+            String logEntry = String.format("[%s] [%s] [%s] [%2d] [%2d] [%s]",
+                    ZonedDateTime.now().format(dt_formatter), level, gameId, count,
+                    extracted, msg);
+            logStream.println(logEntry);
+        }
+    }
+
+    /**
      * Allows for client class to retrieve a TLogger instance using a
      * descriptive name as identifier, so that many classes can easily share the
      * same log instance within an application.
