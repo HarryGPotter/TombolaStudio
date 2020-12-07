@@ -20,6 +20,7 @@ package harrygpotter.tombola.tombolalib;
 
 import harrygpotter.tombola.tombolalib.TAward;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -48,7 +49,7 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
     public boolean add(TAward e) {
         // Attention! prizes must be alwais in ascending order to let TGame methods work properly.
         boolean result = super.add(e);
-        this.sort((TAward one, TAward two) -> Integer.compare(one.getValue(), two.getValue()));
+        this.sort((TAward one, TAward two) -> Integer.compare(one.getCategory(), two.getCategory()));
         return result;
     }
 
@@ -88,10 +89,11 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
 
     /**
      * Return the last award that as been assigned to a card in time order, null
-     * is no award has been already won by a card.
+     * if no award has been already won by a card.
      *
      * @return the last award that as been assigned to a card in time order.
      */
+    @Deprecated
     public TAward getLastWonAward() {
         TAward result = null;
         for (TAward aw : this) {
@@ -101,6 +103,48 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
                 } else if (aw.getWinningOrdinal() > result.getWinningOrdinal()) {
                     result = aw;
                 }
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Return a list of TAward objects containing all the award won with the extraction
+     * of the number passed as input parameter
+     * 
+     * @param number the extracted tombola number to check for won awards
+     * @return the list of TAward objects containing all the award won with the 
+     * extraction of the number passed as input parameter.
+     */
+    public List<TAward> getWonsByExtractionNumber(int number) {
+        List<TAward> result = null;
+        for(TAward aw : this) {
+            if (aw.isAssigned() && aw.getWinningNumber()==number) {
+                if (result==null) {
+                    result = new ArrayList<>();
+                }
+                result.add(aw);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Return a list of TAward objects containing all the award won at the count-th
+     * extraction of the Tombola game.
+     * 
+     * @param count number of extracted numbers at with returned award where won.
+     * @return the list of TAward objects containing all the award won at the count-th
+     * extraction of the Tombola game.
+     */
+    public List<TAward> getWonsByExtractionCount(int count) {
+        List<TAward> result = null;
+        for(TAward aw : this) {
+            if (aw.isAssigned() && aw.getWinningOrdinal()==count) {
+                if (result==null) {
+                    result = new ArrayList<>();
+                }
+                result.add(aw);
             }
         }
         return result;
@@ -115,12 +159,11 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
     public static TAwardList getSimpleSingleAwardList() {
 
         TAwardList singleAwards = new TAwardList();
-
-        singleAwards.add(new TAward("Ambo", TAward.AMBO));
-        singleAwards.add(new TAward("Terno", TAward.TERNO));
-        singleAwards.add(new TAward("Quaterna", TAward.QUATERNA));
-        singleAwards.add(new TAward("Quintina", TAward.QUINTINA));
-        singleAwards.add(new TAward("Tombola", TAward.TOMBOLA));
+        singleAwards.add(new TAward("Ambo", TAward.AMBO, new BigDecimal(1.0), "You won the Ambo!"));
+        singleAwards.add(new TAward("Terno", TAward.TERNO, new BigDecimal(1.5), "You won the Terno!"));
+        singleAwards.add(new TAward("Quaterna", TAward.QUATERNA, new BigDecimal(2.5), "You won the Quaterna!"));
+        singleAwards.add(new TAward("Quintina", TAward.QUINTINA, new BigDecimal(5.0), "You won the Quintina!"));
+        singleAwards.add(new TAward("Tombola", TAward.TOMBOLA, new BigDecimal(10.0), "You won the Tombola!"));
         return singleAwards;
     }
 
@@ -135,18 +178,18 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
 
         TAwardList doubleAwards = new TAwardList();
 
-        doubleAwards.add(new TAward("Primo Ambo", TAward.AMBO));
-        doubleAwards.add(new TAward("Secondo Ambo", TAward.AMBO));
-        doubleAwards.add(new TAward("Primo Terno", TAward.TERNO));
-        doubleAwards.add(new TAward("Secondo Terno", TAward.TERNO));
-        doubleAwards.add(new TAward("Prima Quaterna", TAward.QUATERNA));
-        doubleAwards.add(new TAward("Seconda Quaterna", TAward.QUATERNA));
-        doubleAwards.add(new TAward("Prima Quintina", TAward.QUINTINA));
-        doubleAwards.add(new TAward("Seconda Quintina", TAward.QUINTINA));
+        doubleAwards.add(new TAward("Primo Ambo", TAward.AMBO, new BigDecimal(1.0), "You won the First Ambo!"));
+        doubleAwards.add(new TAward("Secondo Ambo", TAward.AMBO, new BigDecimal(0.7), "You won the Second Ambo!"));
+        doubleAwards.add(new TAward("Primo Terno", TAward.TERNO, new BigDecimal(1.5), "You won the First Terno!"));
+        doubleAwards.add(new TAward("Secondo Terno", TAward.TERNO, new BigDecimal(1.3), "You won the Second Terno!"));
+        doubleAwards.add(new TAward("Prima Quaterna", TAward.QUATERNA, new BigDecimal(2.5), "You won the First Quaterna!"));
+        doubleAwards.add(new TAward("Seconda Quaterna", TAward.QUATERNA, new BigDecimal(2.3), "You won the Second Quaterna!"));
+        doubleAwards.add(new TAward("Prima Quintina", TAward.QUINTINA, new BigDecimal(5.0), "You won the First Quintina!"));
+        doubleAwards.add(new TAward("Seconda Quintina", TAward.QUINTINA, new BigDecimal(4.5), "You won the Second Quintina!"));
         // simple.add(new TAward("Terza Quintina", TAward.QUINTINA));
         // simple.add(new TAward("Due Righe", 10)); //???
-        doubleAwards.add(new TAward("Prima Tombola", TAward.TOMBOLA));
-        doubleAwards.add(new TAward("Seconda Tombola", TAward.TOMBOLA));
+        doubleAwards.add(new TAward("Prima Tombola", TAward.TOMBOLA, new BigDecimal(10.0), "You won the First Tombola!"));
+        doubleAwards.add(new TAward("Seconda Tombola", TAward.TOMBOLA, new BigDecimal(7.5), "You won the Second Tombola!"));
         return doubleAwards;
     }
 

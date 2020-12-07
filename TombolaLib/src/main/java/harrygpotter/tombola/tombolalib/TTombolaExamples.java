@@ -155,7 +155,7 @@ public class TTombolaExamples {
                 TAward contendedAward = tombola.getFirstAwardToResolve();
                 int nCandidates = contendedAward.getCandidatesList().size();
                 if (!randomResolve) {
-                    System.out.printf("There are %d contenders for the award <%s>:%n", nCandidates, contendedAward.getName());
+                    System.out.printf("There are %d contenders for the award <%s>:%n", nCandidates, contendedAward.getLabel());
                     int i = 0;
                     for (TCard cx : contendedAward.getCandidatesList()) {
                         System.out.printf("    [%2d] --> %s owned by %s%n", i++, cx.getLabel(), cx.getOwner());

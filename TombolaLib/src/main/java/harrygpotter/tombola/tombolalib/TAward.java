@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A TAward object has a value (<b>AMBO</b> = two number in a row, <b>TERNO</b>
+ * A TAward object has a category (<b>AMBO</b> = two number in a row, <b>TERNO</b>
  * = three number in a row, ...&nbsp;up to <b>TOMBOLA</b> 15 numbers matched on
  * a card) and represent a prize cards can win playing the game.&nbsp;TAward
  * objects should be prepared before a game starts and collected in a
@@ -90,11 +90,10 @@ public class TAward implements Serializable {
         ASSIGNED
     }
 
-    private String name;
-    private int value;
+    private String label;
+    private int category;
     private TAwardStatus status = TAwardStatus.AVAILABLE;
-    ;
-    
+        
     private final List<TCard> candidates = new ArrayList<>();
     private final List<TCard> winners = new ArrayList<>();
     private final List<Boolean> winWithJollies = new ArrayList<>();
@@ -102,44 +101,61 @@ public class TAward implements Serializable {
     private int winningNumber = -1;     // Stores the number whose extraction led to the assignment of this award to a card.
     private int winningOrdinal = -1;    // Stores the extraction count that led to the assignment to a card.
 
-    private BigDecimal monetaryAward;   //TODO(2.0) Manage monetary compensation linked to each award
+    private BigDecimal value;   //TODO(2.0) Manage monetary compensation linked to each award
     private String giftSet;                     //TODO(2.0) Manage "gifts" associated to each prizes
-    private String extraInfo;                   //TODO(2.0) Just to store additional information if needed...    
+    private String extraInfo;
 
     /**
      * Instantiate an award for a game. You have just to name it and associate a
-     * value to it.
+     * category to it.
      *
-     * @param name The symbolic name identifying the award (you can use "AMBO",
+     * @param name The symbolic label identifying the award (you can use "AMBO",
      * "TERNO", etc.).
-     * @param value The integral score associated to each prize (2 = AMBO, 3 =
+     * @param category The integral score associated to each prize (2 = AMBO, 3 =
      * TERNO, ..., 15 = TOMBOLA). Valid values are within the [2,15] range.
      */
-    public TAward(String name, int value) throws IllegalArgumentException {
-        if ((value < 2 || value > 15) || (value > 5 && value != 15)) {
+    public TAward(String label, int category) throws IllegalArgumentException {
+        if ((category < 2 || category > 15) || (category > 5 && category != 15)) {
             throw new IllegalArgumentException("<Error!> Tombola Award values must be in the [2..5, 15] range.");
         }
         // TODO(2.0) Add "Two rows" or "Rampazzo" award support?
-        this.name = name;
+        this.label = label;
+        this.category = category;
+    }
+
+    /**
+     * Instantiate an award for a game. You have just to name it and associate a
+     * category to it.
+     *
+     * @param name The symbolic label identifying the award (you can use "AMBO",
+     * "TERNO", etc.).
+     * @param category The integral score associated to each prize (2 = AMBO, 3 =
+     * TERNO, ..., 15 = TOMBOLA). Valid values are within the [2,15] range.
+     * @param value a numeric (monetary?) value associated 
+     * @param extraInfo a free string where to store addition info for the award.
+     */
+    public TAward(String label, int category, BigDecimal value, String extraInfo) {
+        this(label, category);
         this.value = value;
+        this.extraInfo = extraInfo;
     }
 
     /**
-     * Return the identifying name of the award.
+     * Return the identifying label of the award.
      *
-     * @return the symbolic name of the award
+     * @return the symbolic label of the award
      */
-    public String getName() {
-        return name;
+    public String getLabel() {
+        return label;
     }
 
     /**
-     * Return the integral value of the prize (2 = AMBO, 3 = TERNO, ...)
+     * Return the integral category of the prize (2 = AMBO, 3 = TERNO, ...)
      *
-     * @return the integral value of the prize (2 = AMBO, 3 = TERNO, ...)
+     * @return the integral category of the prize (2 = AMBO, 3 = TERNO, ...)
      */
-    public int getValue() {
-        return value;
+    public int getCategory() {
+        return category;
     }
 
     /**
@@ -181,11 +197,11 @@ public class TAward implements Serializable {
     }
 
     /**
-     * Return the extractions counter value at the moment this award as been
-     * appointed to a card.
+     * Return the extractions counter category at the moment this award as been
+ appointed to a card.
      *
-     * @return the extractions counter value at the moment this award as been
-     * appointed to a card.
+     * @return the extractions counter category at the moment this award as been
+ appointed to a card.
      */
     public int getWinningOrdinal() {
         return winningOrdinal;
@@ -267,4 +283,21 @@ public class TAward implements Serializable {
     public boolean isContended() {
         return (status == TAwardStatus.CONTENDED);
     }
+    
+    public BigDecimal getValue() {
+        return this.value;
+    }
+    
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+    
+    public String getExtrainfo() {
+        return this.extraInfo;
+    }
+    
+    public void setExtraInfo(String extraInfo) {
+        this.extraInfo = extraInfo;
+    }
+    
 }           // End Of File - Rel.(1.1)
