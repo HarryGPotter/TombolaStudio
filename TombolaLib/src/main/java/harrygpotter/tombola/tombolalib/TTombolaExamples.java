@@ -19,6 +19,7 @@
 package harrygpotter.tombola.tombolalib;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -45,7 +46,7 @@ public class TTombolaExamples {
     private ILogger gameLogger;
     private TGame tombola;
     private TSeriesList series;
-    private TCardList gamingCards;
+    private TCardList cards;
 
     /**
      * Return the {@linkplain TSeriesList} object containing the series used by
@@ -62,7 +63,7 @@ public class TTombolaExamples {
     }
 
     /**
-     * Return the {@linkplain TGame} object used by other methods within this
+     * Return the {@link TGame2} object used by other methods within this
      * object to demonstrate the use of the library and thus the simulation of a
      * tombola match. Call this method after a call to
      * {@linkplain TTombolaExamples#initializeGame()}, otherwise you will get
@@ -93,7 +94,7 @@ public class TTombolaExamples {
 
         ISetFactory factory = TUtils.getSetFactoryByType(SERIES_FACTORY_TYPE);
         seriesPreparationLogger = TSimpleLogger.getLoggerByName(PREPARATION_LOG_NAME);
-        series = new TSeriesList("SempleSet", "Sample");
+        series = new TSeriesList("SempleSet", "AA");
 
         factory.setLogger(seriesPreparationLogger);
         factory.setSeriesBuilder(new TMakeSix());
@@ -109,30 +110,33 @@ public class TTombolaExamples {
     }
 
     /**
-     * This mathod shows how to instantiate and prepare a {@link TGame} object,
+     * This mathod shows how to instantiate and prepare a {@link TGame2} object,
      * that is the main object allowing the management (or simulation) of a
      * tombola match.
      */
     public void initializeGame() {
 
-        gamingCards = new TCardList(series);
+        cards = new TCardList(series);
 
-        String[] owners = new String[]{"Di Maio", "Salvini", "Renzi", "Berlusconi", "Conte", "Di Battista", "Toninelli"};
-        gamingCards.forEach((c) -> {
+        String[] owners = new String[] {"Di Maio", "Salvini", "Renzi", "Berlusconi", "Conte", "Di Battista", "Toninelli"};
+        cards.forEach((c) -> {
             c.setOwner(owners[(new Random()).nextInt(7)]);
         });
 
+        gameLogger = TSimpleLogger.getLoggerByName(TSimpleLogger.DEFAULT_GAME_LOGGER);
+        gameLogger.setLevel(ILogger.TLogLevel.INF);
+        
         tombola = new TGame("SampleMatch");
-        tombola.setLogger(TSimpleLogger.getLoggerByName(TSimpleLogger.DEFAULT_GAME_LOGGER));
-        tombola.setGamingCards(gamingCards);
-        tombola.setAwardList(TAwardList.getSimpleSingleAwardList());
+        tombola.setLogger(gameLogger);
+        tombola.setCards(cards);
+        tombola.setAwards(TAwardList.getSimpleSingleAwardList());
         tombola.setSacchetto(new TSacchetto());
     }
 
     /**
-     * This method shows how to use and interact with a TGame object to simulate
-     * and manage a tombola match.&nbsp;The main TGame method to iteratively
-     * call is the {@link TGame#extractNumber(int)} method.&nbsp;Checking its
+     * This method shows how to use and interact with a TGame2 object to simulate
+     * and manage a tombola match.&nbsp;The main TGame2 method to iteratively
+     * call is the {@link TGame2#extractNumber(int)} method.&nbsp;Checking its
      * return code allows for taking proper action after the extraction of each
      * number, until the game comes to the end.
      *
@@ -142,16 +146,51 @@ public class TTombolaExamples {
      * proceed unattended, thus randomly chosing one winner among all the
      * candidates cards, pass false to let the method stop and ask to the user
      * on the standard console which card must be appointed.
-     */
-    public void mainGameLoop(boolean randomResolve) {
-        TGameResultCode result;
-        result = tombola.extractNumber(0);
-        if (result == TGameResultCode.NOT_READY) {
-            System.err.printf("Ops, something went WRONG during the Tombola Game preparation phase, match cannot start.");
-            return;
-        }
-        while (result != TGameResultCode.GAME_OVER) {
-            if (result == TGameResultCode.MULTICANDIDATES) {
+     * @param confirmCandidates is used to set is explicit confirmation of card
+     * candidates to win awards must be performed by the user or not.
+     */    
+    public void mainGameLoop(boolean randomResolve, boolean confirmCandidates) {
+        tombola.requireCandidateConfirmation(confirmCandidates);
+        
+        // Simple while cycle to show how a Tombola game can be managed. It is just one
+        // of the simplest cycles, but you can arrange it as you prefer once you got the
+        // logic behind TGame object and its methods.
+        // Consider that inserting the .extractNumber() call inside the while condition
+        // cause an extra call after the last award has benn won, but this is not a problem
+        // and shows how TGame handle and log it.
+        while(tombola.extractNumber(0) != TGameResultCode.GAME_OVER) {
+            
+            // this if branch is used only if confirmCandidates is set to true
+            if (tombola.getStatus() == TGameStatus.ACCEPTING) {
+                for(TAward aw : tombola.getAwards().getValidatingAwards()) {
+                    if (aw.getValidatingList().size()>0) {
+                        System.out.printf("There are %d contenders for the award <%s> to confirm or deny%n", aw.getValidatingList().size(), aw.getLabel());
+                        while(aw.getValidatingList().size()>0) {
+                            TCard c = aw.getValidatingList().get(0);
+                            System.out.printf("    Card %s owned by %s: [C]onfirm or [D]eny?%n", c.getLabel(), c.getOwner());
+                            String sChoice = "";
+                            while (!sChoice.toUpperCase().startsWith("D") && !sChoice.toUpperCase().startsWith("C")) {
+                                sChoice = System.console().readLine();
+                                if (sChoice.toUpperCase().startsWith("C")) {
+                                    tombola.acceptCandidate(c);
+                                } else if (sChoice.toUpperCase().startsWith("D")) {
+                                    tombola.denyCandidate(c);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (tombola.getStatus()== TGameStatus.BUSY) {
+                    tombola.assign();
+                } else {
+                    // There's a problema: I should never be here
+                    System.out.println("There's a problema: I should never be here!");
+                }
+            }
+
+            // While loop is needed here because the "Resolving" process can cascade candidates
+            // to next available awards (i.e. a second or third "Terno", etc.
+            while (tombola.getStatus() == TGameStatus.RESOLVING) {
                 TAward contendedAward = tombola.getFirstAwardToResolve();
                 int nCandidates = contendedAward.getCandidatesList().size();
                 if (!randomResolve) {
@@ -163,14 +202,12 @@ public class TTombolaExamples {
                     System.out.printf("  Please enter the number of the winner between [0,%d]: ", nCandidates - 1);
                     String sChoice = System.console().readLine();
                     int winnerNumber = Integer.parseInt(sChoice);
-                    result = tombola.resolveCandidates(winnerNumber);
+                    tombola.resolveCandidates(winnerNumber);
                 } else {
                     int winnerNumber = new Random().nextInt(nCandidates);
-                    result = tombola.resolveCandidates(winnerNumber);
+                    tombola.resolveCandidates(winnerNumber);
                 }
-            } else if (result == TGameResultCode.WINNER || result == TGameResultCode.NOWINNER) {
-                result = tombola.extractNumber(0);
             }
         }
     }
-}           // End Of File - Rel.(1.1)
+}   // End Of File - Rel.(1.1)

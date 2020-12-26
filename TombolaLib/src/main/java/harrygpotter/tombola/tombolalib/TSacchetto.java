@@ -50,6 +50,12 @@ public class TSacchetto {
     // ASSUMPTION:
     //   pos always points to the position on the number vector of the NEXT number to be extracted
     private int pos;
+    
+    // history[n-1] contains:
+    //  -1 if n hasn't been extracted jet
+    //   0 if it has been extracted at the first extraction, 1 if it has been extracted
+    //     extracted at the secon extraction, ...
+    private int[] history;
 
     /**
      * Default constructor: the TSacchetto object is filled with 90 numbers well
@@ -75,8 +81,10 @@ public class TSacchetto {
         this.r = new Random(randomSeed);
         pos = 0;
         numbers = new int[NOVANTA];
+        history = new int[NOVANTA];
         for (int i = 0; i < NOVANTA; i++) {
             numbers[i] = i + 1;
+            history[i] = -1;
         }
         shake();
     }
@@ -100,12 +108,29 @@ public class TSacchetto {
      */
     public int extract() {
         if (pos < NOVANTA) {
+            history[numbers[pos]-1] = pos;
             return numbers[pos++];
         } else {
             return -1;
         }
     }
 
+    /**
+     * Return the extraction count at which the number has been extracted, -1 if
+     * it has not been extracted jet.
+     * 
+     * @param number the number you want to know when has been extracted
+     * @return the 'moment' (i.e. extraction count) at which the number has been
+     *         extracted, -1 if it is still in the ballot box.
+     */
+    public int getExtractionMoment(int number) {
+        return history[number-1];
+    }
+    
+    public boolean isExtracted(int number) {
+        return (history[number-1] > -1);
+    }
+    
     /**
      * Align the sacchetto object forcing the extraction of the number passed as
      * input parameter that, of course, must be a number within the [1..90]

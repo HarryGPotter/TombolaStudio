@@ -89,6 +89,7 @@ public class TCard implements Serializable {
     private int[] rowScores = new int[3];
     private boolean jollyChecked;
     private int lastMatchingRow, lastMatchingScore;
+    private int lastMatched, lastChecked;
 
     protected TNumberCell[][] grid = null;
 
@@ -394,7 +395,7 @@ public class TCard implements Serializable {
      * @param row the row index of the number you want to check if is jolly
      * @param column the column index of the number you want to check if is
      * jolly
-     * @return true if the in the [row,colum] position there is a number and it
+     * @return true if the in the [row, column] position there is a number and it
      * is the jolly one, false otherwise.
      */
     public boolean isJolly(int row, int column) {
@@ -616,6 +617,8 @@ public class TCard implements Serializable {
         this.performedChecks = 0;
         this.lastMatchingRow = -1;
         this.lastMatchingScore = -1;
+        this.lastChecked = -1;
+        this.lastMatched = -1;
     }
 
     /**
@@ -650,13 +653,14 @@ public class TCard implements Serializable {
     public int checkExtraction(int extractedNumber) {
         // TODO(2.0) Cards object do not have memory of all extracted or not extracted numbers. So in
         // case of rollback or other non-sequential operation it is impossible to completely rebuild
-        // the status of the cards (and the game) as if it is if all the actions are executed in the
-        // rigth sequence. This consideration is worth to be written somewhere in the public javadoc
+        // the status of the cards (and the game) as if all the actions are executed in the right
+        // sequence. This consideration is worth to be written somewhere in the public javadoc
         // help.
         if (extractedNumber < 1 || extractedNumber > 90) {
             return -1;
         }
         performedChecks++;
+        lastChecked = extractedNumber;
         int result = 0;
         int matchedRow = -1;
         int matchedPosition = -1;
@@ -681,6 +685,7 @@ public class TCard implements Serializable {
         if (result != 0) {
             this.lastMatchingRow = matchedRow;       //TODO(2.0) I'm not sure which use I can do of it!
             this.lastMatchingScore = result;         //TODO(2.0) I'm not sure which use I can do of it!            
+            this.lastMatched = extractedNumber;      //TODO(2.0) I'm not sure which use I can do of it!            
         }
         if (result != 0 && result != 15) {
             //for(int i= matchedRow*5; i< matchedRow*5+5; i++) {
@@ -795,6 +800,8 @@ public class TCard implements Serializable {
         }
         if (performedChecks > 0) {
             performedChecks--;
+            lastChecked = -2; // TODO(2.0) Cards do not have memory...
+            lastMatched = -2; // TODO(2.0) Cards do not have memory...
         }
         for (int i = 0; i < 15; i++) {
             if (numbers[i] == number) {
@@ -893,7 +900,29 @@ public class TCard implements Serializable {
         }
         return matchedArray;
     }
+    
+    /**
+     * Return the last number that has been checked on this card using the 
+     * {@link TCard#checkExtraction(int)} method, whenever it is present on 
+     * the card or not.
+     * 
+     * @return the last number that has been checked on this card.
+     */
+    public int getLastChecked() {
+        return this.lastChecked;
+    }
 
+    /**
+     * Return the last number that has been checked on this card (see {@link 
+     * TCard#checkExtraction(int)} method AND has also been marked because it is 
+     * present on the card.
+     * 
+     * @return the last number that has been checked on this card.
+     */
+    public int getLastMatched() {
+        return this.lastMatched;
+    }
+    
     /**
      * This method return a bi-dimensional, 3 row by 9 column array of
      * {@linkplain TNumberCell} objects each containing, as simple JavaBean

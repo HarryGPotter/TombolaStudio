@@ -65,6 +65,9 @@ public class TAward implements Serializable {
      * the 15 numbers on the card.
      */
     public static final int TOMBOLA = 15;
+    
+    private static final String[] CATEGORY_LABELS = {"", "", "Ambo", "Terno",
+        "Quaterna", "Quintina", "", "", "", "", "", "", "", "", "", "Tombola"};
 
     /**
      * Possible award statuses used by {@linkplain TGame} methods while checking
@@ -76,6 +79,14 @@ public class TAward implements Serializable {
          * The award has not been assigned jet by any playing card.
          */
         AVAILABLE,
+        
+        /**
+         * The award has 'candidate' cards (see CONTENDED TAwardStatus) but they 
+         * need to be manually validated/accepted by the Game croupier. See also
+         * {@link TGame} TODO (2.0)
+         */
+        VALIDATING,
+        
         /**
          * After the extraction of a number, there are more than one card
          * matching this award score, so they are all 'candidates' among which a
@@ -84,6 +95,7 @@ public class TAward implements Serializable {
          * numbers until the award will be assigned.
          */
         CONTENDED,
+        
         /**
          * The award has been already assigned to card within the tombola game.
          */
@@ -94,6 +106,7 @@ public class TAward implements Serializable {
     private int category;
     private TAwardStatus status = TAwardStatus.AVAILABLE;
         
+    private final List<TCard> validating = new ArrayList<>();
     private final List<TCard> candidates = new ArrayList<>();
     private final List<TCard> winners = new ArrayList<>();
     private final List<Boolean> winWithJollies = new ArrayList<>();
@@ -157,6 +170,14 @@ public class TAward implements Serializable {
     public int getCategory() {
         return category;
     }
+    
+    /**
+     * Return a string for the award category
+     * @return Return a string for the award category
+     */
+    public String getCategoryName() {
+        return TAward.CATEGORY_LABELS[this.category];
+    }
 
     /**
      * Return the 'status' of an award object, used during a tombola game to
@@ -198,10 +219,10 @@ public class TAward implements Serializable {
 
     /**
      * Return the extractions counter category at the moment this award as been
- appointed to a card.
+     * appointed to a card.
      *
      * @return the extractions counter category at the moment this award as been
- appointed to a card.
+     * appointed to a card.
      */
     public int getWinningOrdinal() {
         return winningOrdinal;
@@ -241,6 +262,71 @@ public class TAward implements Serializable {
      */
     public List<TCard> getCandidatesList() {
         return this.candidates;
+    }
+    
+    /**
+     * Return the list of cards waiting to be explicitly accepted or denied to contend
+     * for a tombola award. To be used when {@link TGame#setCandidateConfirmation(boolean)}
+     * is set to true. Return null is the award isn't in VALIDATING status.
+     * 
+     * @return the list of cards waiting to be explicitly accepted or denied to contend 
+     *          for a tombola award. Null is the award isn't in VALIDATING status.
+     */
+    public List<TCard> getValidatingList() {
+        return this.validating;
+    }
+    
+    /**
+     * When {@link TGame#setCandidateConfirmation(boolean)} is set to true, this method
+     * allows to explicitly verify and accept a Card candidate for a tombola award. 
+     * Return true is the card has been properly accepted, false if the card is not in
+     * the validating list for this award. If there are no more card to validate after the
+     * last number extraction (see {@link TGame#extractNumber(int)}) the award status is also
+     * changed from VALIDATING to CONTENDED.
+     * 
+     * @param card the TCard object that should be present in the current "validating" List
+     * for this award.
+     * 
+     * @return true if the card has been validated, false if it is not present in the validating
+     * list or the award is not in VALIDATING status.
+     */
+    public boolean accept(TCard card) {
+        if (status == TAwardStatus.VALIDATING) {
+            if (validating.remove(card)) {
+                candidates.add(card);                
+                if (validating.isEmpty()) {
+                    status = TAwardStatus.CONTENDED;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * When {@link TGame#setCandidateConfirmation(boolean)} is set to true, this method
+     * allows to explicitly verify and DENY a Card candidate for a tombola award. 
+     * Return true is the card has been effectively denied, false if the card is not in
+     * the validating list for this award. If there are no more card to validate after the
+     * last number extraction (see {@link TGame#extractNumber(int)}) the award status is also
+     * changed from VALIDATING to CONTENDED.
+     * 
+     * @param card the TCard object that should be present in the current "validating" List
+     * for this award.
+     * 
+     * @return true if the card has been denied, false if it is not present in the validating
+     * list or the award is not in VALIDATING status.
+     */
+    public boolean deny(TCard card) {
+        if (status == TAwardStatus.VALIDATING) {
+            if (validating.remove(card)) {
+                if (validating.isEmpty() && candidates.isEmpty()) {
+                    status = TAwardStatus.AVAILABLE;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -282,6 +368,10 @@ public class TAward implements Serializable {
      */
     public boolean isContended() {
         return (status == TAwardStatus.CONTENDED);
+    }
+    
+    public boolean isValidating() {
+        return (status == TAwardStatus.VALIDATING);
     }
     
     public BigDecimal getValue() {

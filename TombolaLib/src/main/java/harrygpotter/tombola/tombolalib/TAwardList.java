@@ -18,11 +18,9 @@
  */
 package harrygpotter.tombola.tombolalib;
 
-import harrygpotter.tombola.tombolalib.TAward;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -61,14 +59,27 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
      * available.
      */
     public List<TAward> getAvailableAwards() {
-        List<TAward> avla;
-        avla = new ArrayList<>();
+        List<TAward> avla = new ArrayList<>();
         this.forEach((aw) -> {
             if (!aw.isAssigned()) {
                 avla.add(aw);
             }
         });
         return avla;
+    }
+    
+    /**
+     * TODO(2.0) Insert comment here.
+     * @return 
+     */
+    public List<TAward> getValidatingAwards() {
+        List<TAward> valaw = new ArrayList<>();
+        this.forEach((aw) -> {
+            if (aw.isValidating()) {
+                valaw.add(aw);
+            }
+        });
+        return valaw;
     }
 
     /**
@@ -88,12 +99,14 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
     }
 
     /**
+     * DEPRECATED: see {@link TAwardList#getWonsByExtractionNumber(int)} and 
+     * {@link TAwardList#getWonsByExtractionCount(int)}
      * Return the last award that as been assigned to a card in time order, null
      * if no award has been already won by a card.
      *
      * @return the last award that as been assigned to a card in time order.
      */
-    @Deprecated
+    @Deprecated(forRemoval = true, since = "2.0")
     public TAward getLastWonAward() {
         TAward result = null;
         for (TAward aw : this) {

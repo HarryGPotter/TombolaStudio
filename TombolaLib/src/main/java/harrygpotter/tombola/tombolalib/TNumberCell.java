@@ -62,4 +62,32 @@ public class TNumberCell {
     public void setJolly(boolean jolly) {
         this.jolly = jolly;
     }
+    
+    public boolean isEmpty() {
+        return (number < 1 || number > 90);
+    }
+    
+    /**
+     * Return an helper string to use as class styles tags to render Card Number in 
+     * html pages using CSS styles. Returned class styles name are:
+     *  emptyNum
+     *  cardNum
+     *  matchedNum
+     * @return 
+     */
+    public String getStyleClasses() {
+        String styles;
+        if (isEmpty()) {
+            styles = "emptyNum";
+        } else {
+            styles = "cardNum";
+        }
+        if (isMatched()) {
+            styles += " matchedNum";
+        }
+        if (isJolly()) {
+            styles += " jollyNum";
+        }
+        return styles;
+    }
 }           // End Of File - Rel.(1.1)
