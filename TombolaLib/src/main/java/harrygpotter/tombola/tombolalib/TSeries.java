@@ -37,13 +37,12 @@ public class TSeries {
 
     /**
      * Create a TSeries instance using the 6 TCard objects passed as input
-     * argument.&nbsp; Controls on conformity are minimal, for performance
+     * argument.&nbsp;Controls on conformity are minimal, for performance
      * reason (see {@linkplain TMakeSix}).
      *
      * @param cards the array containing exactly 6, well formed, TCard objects
      */
-    public TSeries(TCard[] cards) {
-        // TODO(1.2) Evaluate the opportunity to make package-only visible this class
+    TSeries(TCard[] cards) {
         if (cards == null) {
             throw new TTombolaRuntimeException("<FATAL> Impossible to initialize a TSeries object with a null card vector");
         }

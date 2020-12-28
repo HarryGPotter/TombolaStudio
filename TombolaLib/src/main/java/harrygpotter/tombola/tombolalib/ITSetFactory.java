@@ -63,6 +63,20 @@ public interface ITSetFactory extends Runnable {
     final static long MAX_ITERATIONS_MILLISECS = 1000 * 60 * 60 * 48; // 48h
 
     /**
+     * The lower (minimum) time limit user can set to to automatically
+     * stop the card series generation process even if desired cards have not been 
+     * generated.
+     */
+    final static long MIN_ITERATIONS_MILLISECS = 1000; // 1 second
+
+    /**
+     * The lower (minimum) number of iteraction cycles user can set to automatically
+     * stop the card series generation process even if desired cards have not been 
+     * generated.
+     */
+    final static long MIN_ITERATIONS = 10000; // 10.000 loops
+
+    /**
      * Enum definition used to maintain the status of the generation algorithm
      */
     static enum TStatus {

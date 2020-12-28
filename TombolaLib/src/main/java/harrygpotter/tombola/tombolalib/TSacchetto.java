@@ -321,8 +321,10 @@ public class TSacchetto {
     }
 
     /**
-     * Undocumented test support code (TODO: DELETE and add JUnit Tests!)
+     * Just a simple test helper method to verify correctness of TSacchetto object
+     * functionalities. It should be substitute with proper JUnit tests in near future.
      */
+    @Deprecated
     public static void simpleTest() {
         TSacchetto s = new TSacchetto();
         System.out.println("First Extracted number: " + s.extract());

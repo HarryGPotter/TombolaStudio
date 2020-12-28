@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Object of this calla represents an HTML template used to print set of cards.
+ * 
  * @author Harry G. Potter harry.g.potter@gmail.com
  * @version 1.1
  * @since 1.8
@@ -84,27 +85,31 @@ public class THtmlTemplate {
         this.cardsPerBlock = cardPerBlock;
     }
 
-    public static List<THtmlTemplateType> searchTemlplates(String[] searchPaths) {
-        List<THtmlTemplateType> result = new ArrayList<>();
+    /**
+     * TODO(2.0) !!!Incomplete method!!! Search for templates in a file system directory
+     * 
+     * @param searchPaths the paths to search in.
+     * @return the list of THtmlTemplate present within the search path
+     */
+    public static List<THtmlTemplate> searchTemplates(String[] searchPaths) {
+        List<THtmlTemplate> result = new ArrayList<>();
         for (String path : searchPaths) {
             if (path != null) {
                 File f = new File(path);
                 if (f.isDirectory()) {
                     String[] elems = f.list();
                     for (String elem : elems) {
+                        THtmlTemplate t = new THtmlTemplate();
+                        t.setName(elem);
+                        result.add(t);
                     }
                 } else if (f.isFile()) {
                 }
             }
         }
-
         return result;
     }
 
-    // TODO(2.0) 
-    private static THtmlTemplateType analizeHtmlTemplate(String templateName) {
-        THtmlTemplateType result = null;
-        System.out.println("Ancora da fare. Dovrei analizzare: " + templateName);
-        return result;
-    }
-}
+    // TODO(2.0) private static THtmlTemplateType analizeHtmlTemplate(String templateName)
+    
+}           // End Of File - Rel.(1.1)

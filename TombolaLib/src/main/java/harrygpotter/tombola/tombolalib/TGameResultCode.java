@@ -38,38 +38,47 @@ public enum TGameResultCode {
      * cannot still be started.
      */
     NOT_READY,
+    
     /**
      * Number passed as input argument is invalid, because it is out of the
      * valid range [1..90]
      */
     WRONG_NUMBER,
+    
     /**
      * The 'resolve candidates' method has been invoked, but there is no
      * contention by more than one card for the same award.
      */
     NOT_RESOLVING,
+    
     /**
      * Extraction method as been invoked with a number as input argument that
      * has been already checked previously in the same game, thus this is an
      * invalid situation.
      */
     ALREADY_CHECKED,
+    
     /**
      * The required number has been extracted, all card checks have been
      * performed and there is no card hitting required scores to get an award,
      * the game can continue with another number extraction.
      */
     NOWINNER,
+    
     /**
      * The required number has been extracted, all card checks have been
      * performed and there is just a single winner for an available award that
      * as been automatically appointed to the award.
      */
     WINNER,
+    
     /**
-     * TODO(2.0)
+     * After an extraction, there are cards ready to win an available award, but
+     * they need to be explicitly confirmed or denied.&nbsp;TGame is in 'VALIDATING'
+     * status until all candidate cards are accepted or denied.
      */
     ACCEPT_OR_DENY,
+    
     /**
      * The required number has been extracted, all card checks have been
      * performed and there are two or more cards hitting scores required to win
@@ -77,6 +86,7 @@ public enum TGameResultCode {
      * invoked as next action and before a new number extraction for the game.
      */
     MULTICANDIDATES,
+    
     /**
      * Last available award has been won and assigned to a card, the match can
      * be considered finished

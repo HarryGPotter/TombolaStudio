@@ -72,9 +72,9 @@ public class THtmlPrinter {
     private final Map<String, String> params = new HashMap<>();
 
     private String noNumberTag = TAG_BLANK;
-    private boolean highlightMatched = true;        // TODO(2.0)
+    // TODO(2.0) private boolean highlightMatched = true;
     private boolean highlightJolly = true;
-    private boolean oneSingleFile = true;           // TODO(2.0)
+    // TODO(2.0) private boolean oneSingleFile = true;
 
     /**
      * The constructor requires the file name (complete path9 where the template

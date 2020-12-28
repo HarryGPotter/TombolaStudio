@@ -239,7 +239,7 @@ public class TCardFormatter {
      * @return a string containing the serialized version of the TCard object
      */
     public String cardToString(TCard card) {
-        return cardToString(card, this.format, this.useJolly);
+        return cardToString(card, -1, -1, this.format, this.useJolly);
     }
 
     /**
@@ -250,30 +250,16 @@ public class TCardFormatter {
      * jolly number, exclamation marks.
      *
      * @param card the TCard object to be serialized in a string
+     * @param cardId an integer representing the unique id of the card, used mainly
+     *               for SQL format
+     * @param cardSetId an integer representing the unique id of the card set 'phater'
+     *                  entity, used mainly for SQL format
      * @param format the format to be used to serialize the string
      * @param jollyOn true to highlight on the string the jolly number, false
      * otherwise
      * @return a string containing the serialized version of the TCard object
      * @see TCardFormat
      * @see TCardFormatter#stringToCard(String, TCardFormat)
-     */
-    public String cardToString(TCard card, TCardFormat format, boolean jollyOn) {
-        return cardToString(card, -1, -1, format, jollyOn);
-    }
-
-    /**
-     * TODO(1.1) Write comment here This method has been added in a second
-     * moment to support SQL files. Maybe the previous one can be deleted...
-     * please check.
-     *
-     * @param card the TCard object to be serialized in a string
-     * @param cardId TODO(1.1) Write comment here
-     * @param cardSetId TODO(1.1) Write comment here
-     * @param format the format to be used to serialize the string
-     * @param jollyOn true to highlight on the string the jolly number, false
-     * otherwise
-     * @return a string containing the serialized version of the TCard object
-     * @see TCardFormat
      */
     public String cardToString(TCard card, int cardId, int cardSetId, TCardFormat format, boolean jollyOn) {
         switch (format) {

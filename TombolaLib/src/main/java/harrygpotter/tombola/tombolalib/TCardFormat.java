@@ -38,30 +38,35 @@ public enum TCardFormat {
      * comments of the file itself.
      */
     AUTO,
+    
     /**
      * Prepare a unique string containing the card label, 27 Numbers on a row
      * (zeros in empty positions), plus the Jolly index within the [0..14] range
      * at the end.
      */
     CSV,
+    
     /**
      * Prepare a unique string containing the card label, 27 Numbers on a row
      * (zeros in empty positions), followed by the Jolly index within the
      * [0..14] range and the maxEqualPerCard and maxEqualPerRow values.
      */
     CSV_PLUS,
+    
     /**
      * Prepare a unique string containing the card label, 15 Numbers on a row
      * (empty positions are skipped), plus the Jolly index within the [0..14]
      * range at the end.
      */
     CSV_PACKED,
+    
     /**
      * Prepare a unique string containing the card label, 15 Numbers on a row
      * (empty positions are skipped), followed by the Jolly index within the
      * [0..14] range and the maxEqualPerCard and maxEqualPerRow values.
      */
     CSV_PACKED_PLUS,
+    
     /**
      * The card is 'nicely' visualized on three rows, putting numbers aligned in
      * their proper columns and leaving spaces where numbers are not
@@ -72,33 +77,40 @@ public enum TCardFormat {
      * asterisks.
      */
     PRETTY,
+    
     /**
      * TODO(2.0) Still Unsupported
      */
     TINY,
+    
     /**
      * TODO(2.0) Still Unsupported
      */
     TINY_SPACED,
+    
     /**
      * TODO(2.0) Still Unsupported
      */
     JSON,
+    
     /**
      * TODO(2.0) Still Unsupported
      */
     XML,
+    
     /**
-     * TODO(2.0) Still Unsupported
+     * Prepare a file containing standard SQL INSERT Statements so it is ready
+     * to help import of cards within a SQL database. Tested on MySQL only.
      */
     SQL,
+    
     /**
-     * TODO(1.2) Write comment here The file aims to be ready to be used within
-     * a Microsoft Word template leveraging its "mail merge" functionalities. To
-     * achieve this goal the file has an heading line with columns (fields)
-     * names, 27 numbers for each card (so, putting zeros where there are no
-     * numbers on the matrix), no comment lines and use the real jolly number
-     * instead of its index, without brackets.
+     * This file format aims to be ready to be used within a Microsoft Word(tm)
+     * template leveraging its "mail merge" functionalities. To achieve this 
+     * goal the file has an heading line with columns (fields) names, 27 numbers
+     * for each card (so, putting zeros where there are no numbers on the matrix),
+     * no comment lines and use the real jolly number instead of its index, 
+     * without brackets.
      */
     MSWORD_MAILMARGE
 }           // End Of File - Rel.(1.1)

@@ -271,9 +271,8 @@ public abstract class TAbstractSetFactory implements ITSetFactory {
      */
     @Override
     public void setTimeLimit(long limitMilliSecs) {
-        if (limitMilliSecs < 1000) {
-            // TODO(1.2) Do not use costants within the code!
-            throw new TTombolaRuntimeException("<ERROR!> A negative value or a value less than 100 milliseconds does not make sense.");
+        if (limitMilliSecs < ITSetFactory.MIN_ITERATIONS_MILLISECS) {
+            throw new TTombolaRuntimeException("<ERROR!> A negative value or a value less than " + ITSetFactory.MIN_ITERATIONS_MILLISECS + " milliseconds does not make sense.");
         }
         this.limitMilliSecs = limitMilliSecs;
     }
@@ -298,9 +297,8 @@ public abstract class TAbstractSetFactory implements ITSetFactory {
      */
     @Override
     public void setIterationsLimit(long limitCount) {
-        if (limitCount < 1000) {
-            // TODO(1.2) Do not use costants within the code!
-            throw new TTombolaRuntimeException("<ERROR!> A negative value or a value less than 1000 iteractions does not make sense.");
+        if (limitCount < ITSetFactory.MIN_ITERATIONS) {
+            throw new TTombolaRuntimeException("<ERROR!> A negative value or a value less than " + ITSetFactory.MIN_ITERATIONS + " iteractions does not make sense.");
         }
         this.limitCount = limitCount;
     }

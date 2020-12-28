@@ -333,7 +333,6 @@ public class TSimpleLogger implements ITLogger {
         this.loggerName = name;
         this.logLevel = ((level == null) ? TLogLevel.VER : level);
         this.logStream = stream;
-        // TODO(2.01) Rivedere bene... capire meglio che si vuole fare...
     }
 
 }           // End Of File - Rel.(1.1)
