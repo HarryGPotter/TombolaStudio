@@ -18,11 +18,11 @@
  */
 package harrygpotter.tombola.tombolacards.interactive;
 
-import harrygpotter.tombola.tombolalib.ISetFactory;
 import harrygpotter.tombola.tombolalib.TCardFormat;
 import harrygpotter.tombola.tombolalib.TSeriesList;
 import harrygpotter.tombola.tombolalib.TUtils;
 import java.util.StringTokenizer;
+import harrygpotter.tombola.tombolalib.ITSetFactory;
 
 /**
  * TODO(1.1) SCRIVERE IL JAVADOC QUI
@@ -47,8 +47,8 @@ public class TTCommandReset extends TTAbstractCommand {
             envMap.put("fileFormat", TCardFormat.CSV_PLUS);
             envMap.put("desiredSeries", 10);
             envMap.put("method", TUtils.AVAILABLE_GENERATION_METHODS[0]);
-            envMap.put("maxepc", ISetFactory.MINIMUM_MAXEPC + 4);            // TODO(1.2) how to improve?
-            envMap.put("maxepr", ISetFactory.MINIMUM_MAXEPR + 3);            // TODO(1.2) how to improve?
+            envMap.put("maxepc", ITSetFactory.MINIMUM_MAXEPC + 4);            // TODO(1.2) how to improve?
+            envMap.put("maxepr", ITSetFactory.MINIMUM_MAXEPR + 3);            // TODO(1.2) how to improve?
             envMap.put("avoidEmptyColumn", true);
             envMap.put("useJolly", true);
             envMap.put("verbose", false);
@@ -61,8 +61,8 @@ public class TTCommandReset extends TTAbstractCommand {
             envMap.put("traceLogFileName", "TombolaCards.log");
             envMap.put("defaultSeriesTitle", "CardSeries001");
             envMap.put("randomSeed", null);
-            envMap.put("timeLimit", ISetFactory.MAX_ITERATIONS_MILLISECS);
-            envMap.put("iteractionLimit", ISetFactory.MAX_ITERATIONS);
+            envMap.put("timeLimit", ITSetFactory.MAX_ITERATIONS_MILLISECS);
+            envMap.put("iteractionLimit", ITSetFactory.MAX_ITERATIONS);
 
             TSeriesList tsl = new TSeriesList("Initialized by TombolaCards!");
             internals.put("seriesList", tsl);

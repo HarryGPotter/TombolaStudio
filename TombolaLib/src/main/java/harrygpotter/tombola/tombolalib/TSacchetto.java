@@ -50,7 +50,7 @@ public class TSacchetto {
     // ASSUMPTION:
     //   pos always points to the position on the number vector of the NEXT number to be extracted
     private int pos;
-    
+
     // history[n-1] contains:
     //  -1 if n hasn't been extracted jet
     //   0 if it has been extracted at the first extraction, 1 if it has been extracted
@@ -108,7 +108,7 @@ public class TSacchetto {
      */
     public int extract() {
         if (pos < NOVANTA) {
-            history[numbers[pos]-1] = pos;
+            history[numbers[pos] - 1] = pos;
             return numbers[pos++];
         } else {
             return -1;
@@ -118,19 +118,25 @@ public class TSacchetto {
     /**
      * Return the extraction count at which the number has been extracted, -1 if
      * it has not been extracted jet.
-     * 
+     *
      * @param number the number you want to know when has been extracted
      * @return the 'moment' (i.e. extraction count) at which the number has been
-     *         extracted, -1 if it is still in the ballot box.
+     * extracted, -1 if it is still in the ballot box.
      */
     public int getExtractionMoment(int number) {
-        return history[number-1];
+        return history[number - 1];
     }
-    
+
+    /**
+     * Return true is the number passed as input argument has been already extracted.
+     * 
+     * @param number the number to check
+     * @return true is the number passed as input argument has been already extracted. 
+     */
     public boolean isExtracted(int number) {
-        return (history[number-1] > -1);
+        return (history[number - 1] > -1);
     }
-    
+
     /**
      * Align the sacchetto object forcing the extraction of the number passed as
      * input parameter that, of course, must be a number within the [1..90]
@@ -209,7 +215,7 @@ public class TSacchetto {
         extracted = Arrays.copyOfRange(numbers, 0, pos);
         return extracted;
     }
-    
+
     /**
      * Return a List containing the numbers already extracted from the
      * sacchetto, in the same order by which they come out from the ballot box,
@@ -221,36 +227,46 @@ public class TSacchetto {
     public List<Integer> getExtractedAsList() {
         ArrayList<Integer> extracted = new ArrayList<>();
         if (pos > 0) {
-            for(int i=pos-1; i>=0; i--) {
+            for (int i = pos - 1; i >= 0; i--) {
                 extracted.add(numbers[i]);
             }
         }
-        return extracted;       
+        return extracted;
     }
-    
+
     /**
-     * TODO(1.1) Write comment here
-     * @return 
+     * Return the List of all numbers already extracted except the last one (see
+     * {@link TSacchetto#getLastExtracted()}), ordering them from the most recent
+     * extracted to the oldest one.&nbsp;An empty, not null list is returned if less 
+     * than two numbers have been extracted.
+     * 
+     * @return the all numbers already extracted, excluded the last one.
      */
     public List<Integer> getExtractionHistory() {
         return getExtractionHistory(90);
     }
 
     /**
-     * TODO(1.1) Write comment here
-     * @param limit
-     * @return 
+     * Return the List of numbers already extracted except the last one (see
+     * {@link TSacchetto#getLastExtracted()}), ordering them from the most recent
+     * extracted to the oldest one.&nbsp;An empty, not null list is returned if less 
+     * than two numbers have been extracted.
+     *
+     * @param limit specified how many numbers should be included in the returned list.
+     * 
+     * @return the last 'limit' numbers already extracted, excluded the last one.
      */
     public List<Integer> getExtractionHistory(int limit) {
-        if (pos<2)
-            return null;
         ArrayList<Integer> extracted = new ArrayList<>();
-        int start = pos-2;
-        int stop = (start-limit+1)>0 ? (start-limit+1) : 0;
-        for(int i=start; i>=stop; i--) {
+        if (pos < 2) { 
+            return extracted;
+        }
+        int start = pos - 2;
+        int stop = (start - limit + 1) > 0 ? (start - limit + 1) : 0;
+        for (int i = start; i >= stop; i--) {
             extracted.add(numbers[i]);
         }
-        return extracted;       
+        return extracted;
     }
 
     /**
@@ -305,7 +321,7 @@ public class TSacchetto {
     }
 
     /**
-     * Undocumented test support code
+     * Undocumented test support code (TODO: DELETE and add JUnit Tests!)
      */
     public static void simpleTest() {
         TSacchetto s = new TSacchetto();
@@ -313,7 +329,7 @@ public class TSacchetto {
         System.out.println("Second Extracted number: " + s.extract());
         System.out.println("Third extracted number: " + s.extract());
         System.out.println("Fourth extracted number (forced): " + s.manuallyExtract(13));
-        System.out.print(">>> Still to be extraced: ");
+        System.out.print(">>> Still to be extracted: ");
         for (int toExtract : s.getToExtractAsArray()) {
             System.out.print("" + toExtract + " ");
         }

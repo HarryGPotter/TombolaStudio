@@ -34,7 +34,7 @@ import java.util.List;
  * @since 1.8
  */
 public class TAwardList extends ArrayList<TAward> implements Serializable {
-    
+
     /**
      * Add another award to the award list.&nbsp;It is just the standard
      * <code>add</code> method for a List object, overwritten in order to
@@ -67,10 +67,15 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
         });
         return avla;
     }
-    
+
     /**
-     * TODO(2.0) Insert comment here.
-     * @return 
+     * Return the list of all awards for which there are cards waiting for an explicit
+     * confirmation or deny of their candidature.
+     *
+     * @return the list of all awards for which there are cards waiting for an explicit
+     * confirmation or deny of their candidature.
+     * 
+     * @see TGame#confirmCandidate(TCard) 
      */
     public List<TAward> getValidatingAwards() {
         List<TAward> valaw = new ArrayList<>();
@@ -99,10 +104,10 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
     }
 
     /**
-     * DEPRECATED: see {@link TAwardList#getWonsByExtractionNumber(int)} and 
-     * {@link TAwardList#getWonsByExtractionCount(int)}
-     * Return the last award that as been assigned to a card in time order, null
-     * if no award has been already won by a card.
+     * DEPRECATED: see {@link TAwardList#getWonsByExtractionNumber(int)} and
+     * {@link TAwardList#getWonsByExtractionCount(int)} Return the last award
+     * that as been assigned to a card in time order, null if no award has been
+     * already won by a card.
      *
      * @return the last award that as been assigned to a card in time order.
      */
@@ -120,20 +125,20 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
         }
         return result;
     }
-    
+
     /**
-     * Return a list of TAward objects containing all the award won with the extraction
-     * of the number passed as input parameter
-     * 
+     * Return a list of TAward objects containing all the award won with the
+     * extraction of the number passed as input parameter
+     *
      * @param number the extracted tombola number to check for won awards
-     * @return the list of TAward objects containing all the award won with the 
+     * @return the list of TAward objects containing all the award won with the
      * extraction of the number passed as input parameter.
      */
     public List<TAward> getWonsByExtractionNumber(int number) {
         List<TAward> result = null;
-        for(TAward aw : this) {
-            if (aw.isAssigned() && aw.getWinningNumber()==number) {
-                if (result==null) {
+        for (TAward aw : this) {
+            if (aw.isAssigned() && aw.getWinningNumber() == number) {
+                if (result == null) {
                     result = new ArrayList<>();
                 }
                 result.add(aw);
@@ -143,18 +148,19 @@ public class TAwardList extends ArrayList<TAward> implements Serializable {
     }
 
     /**
-     * Return a list of TAward objects containing all the award won at the count-th
-     * extraction of the Tombola game.
-     * 
-     * @param count number of extracted numbers at with returned award where won.
-     * @return the list of TAward objects containing all the award won at the count-th
-     * extraction of the Tombola game.
+     * Return a list of TAward objects containing all the award won at the
+     * count-th extraction of the Tombola game.
+     *
+     * @param count number of extracted numbers at with returned award where
+     * won.
+     * @return the list of TAward objects containing all the award won at the
+     * count-th extraction of the Tombola game.
      */
     public List<TAward> getWonsByExtractionCount(int count) {
         List<TAward> result = null;
-        for(TAward aw : this) {
-            if (aw.isAssigned() && aw.getWinningOrdinal()==count) {
-                if (result==null) {
+        for (TAward aw : this) {
+            if (aw.isAssigned() && aw.getWinningOrdinal() == count) {
+                if (result == null) {
                     result = new ArrayList<>();
                 }
                 result.add(aw);

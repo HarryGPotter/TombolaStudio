@@ -40,7 +40,7 @@ import java.util.Arrays;
  * @version 1.1
  * @see TCard
  * @see TSeries
- * @see ISetFactory
+ * @see ITSetFactory
  * @since 1.8
  */
 public class TMakeSix {
@@ -225,12 +225,12 @@ public class TMakeSix {
      * generated using {@link TMakeSix#prepareSix()} method.
      *
      * @return six TCards objects wrapped in a TSeries object.
-     * 
+     *
      */
     public TSeries prepareSeries() {
         return new TSeries(prepareSix());
     }
-    
+
     /**
      * Fill the randomBox array with numbers from 1 to 90, in ascending order
      */

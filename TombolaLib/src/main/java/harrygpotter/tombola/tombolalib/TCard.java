@@ -41,7 +41,7 @@ import java.util.Random;
  * cards. Using card series optimizes performance when playing Tombola,
  * hopefully reducing the probability of contemporary wins.
  * <p>
- * TombolaLib includes also classes implementing the {@linkplain ISetFactory}
+ * TombolaLib includes also classes implementing the {@linkplain ITSetFactory}
  * interface and providing several heuristic algorithms aiming to generate large
  * sets of card series while trying to reduce or limit equal numbers between
  * cards and/or card rows.
@@ -66,7 +66,7 @@ import java.util.Random;
  * @author Harry G. Potter (harry.g.potter@gmail.com)
  * @version 1.1
  * @see TMakeSix
- * @see ISetFactory
+ * @see ITSetFactory
  * @see TFileFormatter
  * @see TGame
  * @since 1.8
@@ -76,10 +76,10 @@ public class TCard implements Serializable {
     // Everithing a simple TombolaCard has to be and do
     // ---------------------------------------------------------------- ^_^ -
     private String label = "";
-    private String notes;
-    private String owner;
     private int[] numbers = new int[15];
     private int jollyIndex = -1;
+    private String notes;
+    private String owner;
 
     private int maxepc = 0;
     private int maxepr = 0;
@@ -97,12 +97,12 @@ public class TCard implements Serializable {
      * "Offhand" constructor that can be used to randomly generate a single,
      * well formed, independent TCard object.&nbsp;Each card has a label
      * property used to uniquely identify it, specially helpful when the card
-     * belongs to a (large) set of series (see the {@linkplain ISetFactory}
+     * belongs to a (large) set of series (see the {@linkplain ITSetFactory}
      * interface).
      *
      * @param label A symbolic name usually used to uniquely identify the card.
      * @see TMakeSix
-     * @see ISetFactory
+     * @see ITSetFactory
      */
     public TCard(String label) {
         this(label, (new Random()).nextLong(), true);
@@ -307,7 +307,7 @@ public class TCard implements Serializable {
      * @param other The second TCard objects against to compare each rows.
      * @return the maximum amount of equal numbers between all the 9 compared
      * couples of rows.
-     * @see ISetFactory
+     * @see ITSetFactory
      */
     public int compareByRow(TCard other) {
         int max_found = 0;
@@ -340,7 +340,7 @@ public class TCard implements Serializable {
      *
      * @param other The second TCard objects against to compare the card.
      * @return the amount of equal numbers found between the two cards.
-     * @see ISetFactory
+     * @see ITSetFactory
      */
     public int compareByCard(TCard other) {
         int count = TUtils.compareSubVectors(this.numbers, other.numbers, 0, 0, 15);
@@ -395,8 +395,8 @@ public class TCard implements Serializable {
      * @param row the row index of the number you want to check if is jolly
      * @param column the column index of the number you want to check if is
      * jolly
-     * @return true if the in the [row, column] position there is a number and it
-     * is the jolly one, false otherwise.
+     * @return true if the in the [row, column] position there is a number and
+     * it is the jolly one, false otherwise.
      */
     public boolean isJolly(int row, int column) {
         return (getLinearIndex(row, column) == getJollyIndex());
@@ -900,12 +900,12 @@ public class TCard implements Serializable {
         }
         return matchedArray;
     }
-    
+
     /**
-     * Return the last number that has been checked on this card using the 
-     * {@link TCard#checkExtraction(int)} method, whenever it is present on 
-     * the card or not.
-     * 
+     * Return the last number that has been checked on this card using the
+     * {@link TCard#checkExtraction(int)} method, whenever it is present on the
+     * card or not.
+     *
      * @return the last number that has been checked on this card.
      */
     public int getLastChecked() {
@@ -913,16 +913,16 @@ public class TCard implements Serializable {
     }
 
     /**
-     * Return the last number that has been checked on this card (see {@link 
-     * TCard#checkExtraction(int)} method AND has also been marked because it is 
+     * Return the last number that has been checked on this card (see {@link
+     * TCard#checkExtraction(int)} method AND has also been marked because it is
      * present on the card.
-     * 
+     *
      * @return the last number that has been checked on this card.
      */
     public int getLastMatched() {
         return this.lastMatched;
     }
-    
+
     /**
      * This method return a bi-dimensional, 3 row by 9 column array of
      * {@linkplain TNumberCell} objects each containing, as simple JavaBean
@@ -941,7 +941,7 @@ public class TCard implements Serializable {
                     grid[i][j] = new TNumberCell();
                     grid[i][j].setNumber(this.getNumber(i, j));
                     grid[i][j].setJolly(this.isJolly(i, j));
-                    
+
                 }
             }
         }

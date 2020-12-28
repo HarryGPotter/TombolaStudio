@@ -20,8 +20,7 @@ package harrygpotter.tombola.tombolalib;
 
 /**
  * Abstract class providing standard, basic implementation of <i>common</i>
- * methods for the {@linkplain
- * ISetFactory} interface. Who wants to provide a new heuristic to generate set
+ * methods for the {@link ITSetFactory} interface. Who wants to provide a new heuristic to generate set
  * of series, instead of directly implementing the ISetFactory interface, can
  * sub-class TAbstracSetFactory inheriting all its "boiler-plate"
  * implementations thus concentrating only on the core, differentiating,
@@ -29,12 +28,12 @@ package harrygpotter.tombola.tombolalib;
  *
  * @author Harry G. Potter harry.g.potter@gmail.com
  * @version 1.1
- * @see ISetFactory
+ * @see ITSetFactory
  * @see TSimpleSetFactory
  * @see TProgressiveSetFactory
  * @since 1.8
  */
-public abstract class TAbstractSetFactory implements ISetFactory {
+public abstract class TAbstractSetFactory implements ITSetFactory {
 
     protected static int DEFAULT_NUMSERIES = 10;
     //protected static String DEFAULT_HEURISTIC_LOGGER_NAME = "DEFAULT.SERIES.GENERATION.LOGGER";
@@ -42,7 +41,7 @@ public abstract class TAbstractSetFactory implements ISetFactory {
     protected TStatus status = TStatus.INITIALIZING;
     protected TMakeSix seriesBuilder = null;
     protected TSeriesList seriesList = null;
-    protected ILogger logger = null;
+    protected ITLogger logger = null;
     protected int desiredSeries = DEFAULT_NUMSERIES;
     protected int maxepc = MINIMUM_MAXEPC + 3;
     protected int maxepr = MINIMUM_MAXEPR + 2;
@@ -79,7 +78,7 @@ public abstract class TAbstractSetFactory implements ISetFactory {
      * errors.
      */
     @Override
-    public void setLogger(ILogger logger) {
+    public void setLogger(ITLogger logger) {
         if (status == TStatus.INITIALIZING || status == TStatus.READY) {
             this.logger = logger;
         } else {
@@ -94,7 +93,7 @@ public abstract class TAbstractSetFactory implements ISetFactory {
      * @return Return the logger used by this set factory object.
      */
     @Override
-    public ILogger getLogger() {
+    public ITLogger getLogger() {
         return this.logger;
     }
 
@@ -343,7 +342,7 @@ public abstract class TAbstractSetFactory implements ISetFactory {
      * COMPLETED status. It will instantiate a dedicated Java Thread (daemon
      * type, so it will not block the whole Java virtual machine instance) to
      * execute the process. The status of the set factory object is NOT changed.
-     * The {@linkplain ISetFactory#run()} method has the responsibilities to
+     * The {@link ITSetFactory#run()} method has the responsibilities to
      * change it from READY (or STOPPED, or COMPLETED) to RUNNING as one of its
      * first instructions.
      */
@@ -379,10 +378,10 @@ public abstract class TAbstractSetFactory implements ISetFactory {
     /**
      * Invoke this method to request the interruption of the series generation
      * algorithm before it completes all desired series of cards. Interruption
-     * request should be examined within the {@linkplain ISetFactory#run()}
+     * request should be examined within the {@link ITSetFactory#run()}
      * method (the factory is in RUNNING state) and the elaboration will be
      * interrupted. The set factory object will be moved to the STOPPED status.
-     * A further invocation of the {@linkplain ISetFactory#requestStart()} could
+     * A further invocation of the {@link ITSetFactory#requestStart()} could
      * typically re-start the process where it was interrupted.
      */
     @Override
@@ -450,9 +449,9 @@ public abstract class TAbstractSetFactory implements ISetFactory {
     }
 
     /**
-     * When created, an object implementing the ISetFactory interface is in the
-     * "INITIALIZIG" state, that is mandatory parameters and indispensable
-     * components still must be set.&nbsp;This method check is parameters have
+     * When created, an object implementing the ITSetFactory interface is in the
+ "INITIALIZIG" state, that is mandatory parameters and indispensable
+ components still must be set.&nbsp;This method check is parameters have
      * been properly set and consequently update the object status to "READY".
      * Specifically, following parameters and component objects are considered
      * mandatory: the desired number of series, the TMakeSix instance used to

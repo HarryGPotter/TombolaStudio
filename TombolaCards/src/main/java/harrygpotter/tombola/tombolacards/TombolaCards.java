@@ -27,8 +27,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import harrygpotter.tombola.tombolalib.ILogger;
-import harrygpotter.tombola.tombolalib.ISetFactory;
 import harrygpotter.tombola.tombolalib.TCardFormat;
 import harrygpotter.tombola.tombolalib.TFileFormatter;
 import harrygpotter.tombola.tombolalib.TSimpleLogger;
@@ -37,6 +35,8 @@ import harrygpotter.tombola.tombolalib.TSeriesList;
 import harrygpotter.tombola.tombolalib.TUtils;
 import harrygpotter.tombola.tombolacards.interactive.*;
 import java.util.Arrays;
+import harrygpotter.tombola.tombolalib.ITSetFactory;
+import harrygpotter.tombola.tombolalib.ITLogger;
 
 /**
  * TombolaCards - A Command Line Tool that you'll love from the first time you'll
@@ -80,8 +80,8 @@ public class TombolaCards {
         envMap.put("fileFormat", TCardFormat.CSV_PLUS);
         envMap.put("desiredSeries", 10);
         envMap.put("method", TUtils.AVAILABLE_GENERATION_METHODS[0]);
-        envMap.put("maxepc", ISetFactory.MINIMUM_MAXEPC + 4 );            // TODO(2.0) how to improve?
-        envMap.put("maxepr", ISetFactory.MINIMUM_MAXEPR + 3 );            // TODO(2.0) how to improve?
+        envMap.put("maxepc", ITSetFactory.MINIMUM_MAXEPC + 4 );            // TODO(2.0) how to improve?
+        envMap.put("maxepr", ITSetFactory.MINIMUM_MAXEPR + 3 );            // TODO(2.0) how to improve?
         envMap.put("avoidEmptyColumn", true);
         envMap.put("useJolly", true);
         envMap.put("verbose", false);
@@ -95,8 +95,8 @@ public class TombolaCards {
         envMap.put("traceLogFileName", "TombolaCards.log");
         envMap.put("defaultSeriesTitle", "CardSeries001");
         envMap.put("randomSeed", null);
-        envMap.put("timeLimit", ISetFactory.MAX_ITERATIONS_MILLISECS);
-        envMap.put("iteractionLimit", ISetFactory.MAX_ITERATIONS);
+        envMap.put("timeLimit", ITSetFactory.MAX_ITERATIONS_MILLISECS);
+        envMap.put("iteractionLimit", ITSetFactory.MAX_ITERATIONS);
 
         internalMap.put("prompt", ">>");
         internalMap.put("rPrompt", "<<");
@@ -197,8 +197,8 @@ public class TombolaCards {
                     case "MPC":
                         try {
                             int tempMpc = Integer.parseInt(argArg);
-                            if (tempMpc < ISetFactory.MINIMUM_MAXEPC) {
-                                System.err.println("<FATAL!> Max Equal number allowed per Card cannot be lesser than " + ISetFactory.MINIMUM_MAXEPC);
+                            if (tempMpc < ITSetFactory.MINIMUM_MAXEPC) {
+                                System.err.println("<FATAL!> Max Equal number allowed per Card cannot be lesser than " + ITSetFactory.MINIMUM_MAXEPC);
                                 System.exit(-1);
                             }
                             envMap.put("maxepc", tempMpc);
@@ -210,8 +210,8 @@ public class TombolaCards {
                     case "MPR":
                         try {
                             int tempMpr = Integer.parseInt(argArg);
-                            if (tempMpr < ISetFactory.MINIMUM_MAXEPR) {
-                                System.err.println("<FATAL!> Max Equal number allowed per Row cannot be lesser than " + ISetFactory.MINIMUM_MAXEPR);
+                            if (tempMpr < ITSetFactory.MINIMUM_MAXEPR) {
+                                System.err.println("<FATAL!> Max Equal number allowed per Row cannot be lesser than " + ITSetFactory.MINIMUM_MAXEPR);
                                 System.exit(-1);
                             }
                             envMap.put("maxepr", tempMpr);
@@ -344,10 +344,10 @@ public class TombolaCards {
         this.internals = intMap;
         String logName = (String)environment.get("traceLogFileName");
 
-        ILogger logger = TSimpleLogger.getLoggerByName(logName);
+        ITLogger logger = TSimpleLogger.getLoggerByName(logName);
         if (logger==null) {
             try {
-                TSimpleLogger.prepareLogger(logName, ILogger.TLogLevel.VER, logName);
+                TSimpleLogger.prepareLogger(logName, ITLogger.TLogLevel.VER, logName);
                 logger = TSimpleLogger.getLoggerByName(logName);
             } catch (FileNotFoundException fnfe) {
                 System.err.println("<ERROR> Impossible to prepare the trace log file. No trace log will be generated.");
@@ -468,7 +468,7 @@ public class TombolaCards {
                     dMaxEpr = cMaxEpr;
                 }
             }
-            ISetFactory factory = TUtils.getSetFactoryByType((String) environment.get("method"));
+            ITSetFactory factory = TUtils.getSetFactoryByType((String) environment.get("method"));
             if (factory == null) {
                 System.err.println("<FATAL!> Chosen Set Series generation method does not exist.");
                 System.exit(-2);
@@ -486,7 +486,7 @@ public class TombolaCards {
 
             factory.setSeriesBuilder(builder);
             
-            factory.setLogger((ILogger) internals.get("logger"));
+            factory.setLogger((ITLogger) internals.get("logger"));
             int pingCounter = tsl.size();
             if (!unattended && !verbose) {
                 System.out.print("\nRequested " + factory.getDesideredSeries() + " series, " + factory.getDesideredSeries()*6 + " cards.");
@@ -552,8 +552,8 @@ public class TombolaCards {
 
         Scanner scanner = new Scanner(System.in);
         while (!flagExit) {
-            ISetFactory isf = (ISetFactory) internals.get("setFactory");
-            if (isf != null && isf.getStatus() != ISetFactory.TStatus.RUNNING) {
+            ITSetFactory isf = (ITSetFactory) internals.get("setFactory");
+            if (isf != null && isf.getStatus() != ITSetFactory.TStatus.RUNNING) {
                 boolean bNotifyEnd = (boolean) internals.get("notifyConclusion");
                 if (bNotifyEnd) {
                     System.out.println(internals.get("rPrompt") + " Generation algorithm has come to an end.\n");

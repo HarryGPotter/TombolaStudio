@@ -62,13 +62,14 @@ public enum TGameStatus {
      */
     RESOLVING,
     /**
-     * When cards are candidates to win an award and {@link TGame#setRequireCandidateConfirmation(boolean)}
-     * is set to true, they must be explicitly verified and accepted or denied.
-     * If a candidate card is denied, it will not participate to the winner decision process
-     * following each number extraction. This mechanism has been mainly implemented to
-     * require explicit reclaim of the award by players, otherwise (i.e. if they are
-     * distracted of leave the gaming room) the award can be assigned to the next,
-     * more ready player.
+     * When cards are candidates to win an award and
+     * {@link TGame#setConfirmCandidateOn(boolean)} is set to true,
+     * they must be explicitly verified and accepted or denied. If a candidate
+     * card is denied, it will not participate to the winner decision process
+     * following each number extraction. This mechanism has been mainly
+     * implemented to require explicit reclaim of the award by players,
+     * otherwise (i.e. if they are distracted of leave the gaming room) the
+     * award can be assigned to the next, more ready player.
      */
     ACCEPTING,
     /**

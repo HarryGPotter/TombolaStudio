@@ -29,7 +29,7 @@ package harrygpotter.tombola.tombolalib;
  * @version 1.1
  * @see TMakeSix
  * @see TAbstractSetFactory
- * @see ISetFactory
+ * @see ITSetFactory
  * @since 1.8
  */
 public class TSimpleSetFactory extends TAbstractSetFactory {
@@ -101,8 +101,8 @@ public class TSimpleSetFactory extends TAbstractSetFactory {
         seriesList.compareByRow();
         seriesList.sortBestToWorstByCard();
         boolean commentFound = false;
-        if (seriesList.getComments()!=null) {
-            for(String s: seriesList.getComments()) {
+        if (seriesList.getComments() != null) {
+            for (String s : seriesList.getComments()) {
                 commentFound |= s.equalsIgnoreCase("Series are sorted from 'best' to 'worst' considering maximum equal number between cards.");
             }
         }

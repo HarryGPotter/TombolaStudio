@@ -18,13 +18,13 @@
  */
 package harrygpotter.tombola.tombolacards.interactive;
 
-import harrygpotter.tombola.tombolalib.ILogger;
-import harrygpotter.tombola.tombolalib.ISetFactory;
 import harrygpotter.tombola.tombolalib.TCardFormat;
 import harrygpotter.tombola.tombolalib.TSeriesList;
 import harrygpotter.tombola.tombolalib.TUtils;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import harrygpotter.tombola.tombolalib.ITSetFactory;
+import harrygpotter.tombola.tombolalib.ITLogger;
 
 /**
  * This class, used when TombolaCards is in interactive mode, implements the
@@ -55,7 +55,7 @@ public class TTCommandSet extends TTAbstractCommand {
     @Override
     public int execute(StringTokenizer st) {
         String[] params = this.parseParameter(st);
-        ISetFactory isf = (ISetFactory) this.internals.get("setFactory");
+        ITSetFactory isf = (ITSetFactory) this.internals.get("setFactory");
 
         if (params.length < 1) {
             echo("Use SET command to change the value of a parameter.\n");
@@ -87,7 +87,7 @@ public class TTCommandSet extends TTAbstractCommand {
                 sResult = ("Parameter ["+pName+"] NOT recognized. Use ENV command to display names and values for all environment parameters.");
             }
             return -2;
-        } else if (isf != null && (isf.getStatus() == ISetFactory.TStatus.RUNNING || isf.getStatus() == ISetFactory.TStatus.STOPPING)) {
+        } else if (isf != null && (isf.getStatus() == ITSetFactory.TStatus.RUNNING || isf.getStatus() == ITSetFactory.TStatus.STOPPING)) {
             sResult = "<WARNING> You cannot chage parameters while series generation is running. Please, STOP it before any changes.";
             return -3;
         } else {
@@ -134,8 +134,8 @@ public class TTCommandSet extends TTAbstractCommand {
                 case "MAXEPC":
                 case "EPC":
                     iTemp = Integer.parseInt(sNewValue);
-                    if (iTemp<ISetFactory.MINIMUM_MAXEPC || iTemp> 15) {
-                        sResult = String.format("<ERROR> Max Equal Number between Cards must be within the [%d, 15] range.", ISetFactory.MINIMUM_MAXEPC);
+                    if (iTemp<ITSetFactory.MINIMUM_MAXEPC || iTemp> 15) {
+                        sResult = String.format("<ERROR> Max Equal Number between Cards must be within the [%d, 15] range.", ITSetFactory.MINIMUM_MAXEPC);
                         return -5;
                     }
                     this.envMap.put("maxepc", iTemp);
@@ -144,8 +144,8 @@ public class TTCommandSet extends TTAbstractCommand {
                 case "MAXEPR":
                 case "EPR":
                     iTemp = Integer.parseInt(sNewValue);
-                    if (iTemp<ISetFactory.MINIMUM_MAXEPR || iTemp> 5) {
-                        sResult = String.format("<ERROR> Max Equal Number between card Rows must be within the [%d, 5] range.", ISetFactory.MINIMUM_MAXEPR);
+                    if (iTemp<ITSetFactory.MINIMUM_MAXEPR || iTemp> 5) {
+                        sResult = String.format("<ERROR> Max Equal Number between card Rows must be within the [%d, 5] range.", ITSetFactory.MINIMUM_MAXEPR);
                         return -5;
                     }
                     this.envMap.put("maxepr", iTemp);
@@ -204,7 +204,7 @@ public class TTCommandSet extends TTAbstractCommand {
                             if (isf != null) {
                                 isf = TUtils.getSetFactoryByType((String)envMap.get("method"));
                                 this.internals.put("setFactory", isf);
-                                ILogger logger = (ILogger) internals.get("logger");
+                                ITLogger logger = (ITLogger) internals.get("logger");
                                 logger.info("Series Set Factory just created [" + isf.getClass().getSimpleName()+"]");                                
                             }
                         }

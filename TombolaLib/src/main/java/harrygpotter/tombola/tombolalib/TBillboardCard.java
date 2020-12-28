@@ -182,7 +182,6 @@ public class TBillboardCard extends TCard {
     // getTotalScore() --> OK
     // getScoreOnRow() --> OK
     // getMatchedNumbers() --> OK
-    
     /**
      * Return a list of new cards containing the six "special cards" that
      * compose the classical tombola billboard.&nbsp;You can add this list of
@@ -198,7 +197,7 @@ public class TBillboardCard extends TCard {
     public static TCardList getWholeBillboard(String label) {
         TCardList tabellone = new TCardList();
         for (int i = 0; i < 6; i++) {
-            tabellone.add(new TBillboardCard(label+(i+1), i));
+            tabellone.add(new TBillboardCard(label + (i + 1), i));
         }
         return tabellone;
     }

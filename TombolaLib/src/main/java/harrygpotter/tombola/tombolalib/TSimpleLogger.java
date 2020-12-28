@@ -28,7 +28,7 @@ import java.util.Map;
 
 /**
  * TSimpleLogger is a quite simple class helping to manage the important task of
- * take trace (that is, log) of actions made by all maior TombolaLib
+ * take trace (that is, log) of actions made by all major TombolaLib
  * methods.&nbsp;I know I could have chosen to use many beautiful, complex,
  * logger solutions and packages already available for Java, but I preferred to
  * reduce to the minimum external dependencies and keep things as simple as
@@ -36,7 +36,7 @@ import java.util.Map;
  * <ul>
  * <li>Each library user can prepare his own logger objects using one of the
  * overloaded static
- * {@linkplain TSimpleLogger#prepareLogger(java.lang.String, harrygpotter.tombola.tombolalib.ILogger.TLogLevel, java.io.PrintStream)}
+ * {@linkplain TSimpleLogger#prepareLogger(String, ITLogger.TLogLevel, PrintStream)}
  * method available. Each log object will be registered with a symbolic name and
  * this name will allow one or more objects within a program to use and send
  * messages to the same logger. Static method
@@ -44,10 +44,10 @@ import java.util.Map;
  * way. That's it, simple.</li>
  * <li>Standard, default, simple logger have been already provided with no need
  * to pass through the
- * {@linkplain TSimpleLogger#prepareLogger(java.lang.String, harrygpotter.tombola.tombolalib.ILogger.TLogLevel, java.io.PrintStream)}
+ * {@linkplain TSimpleLogger#prepareLogger(String, ITLogger.TLogLevel, PrintStream)}
  * phase. They have standard names also stored in public final strings:
  * <ul>
- * <li>A default logger used by ISetFactory objects to log series generation
+ * <li>A default logger used by ITSetFactory objects to log series generation
  * events</li>
  * <li>A default logger used by TGame objects to log tombola match related
  * events</li>
@@ -61,43 +61,51 @@ import java.util.Map;
  * @version 1.1
  * @since 1.8
  */
-public class TSimpleLogger implements ILogger {
+public class TSimpleLogger implements ITLogger {
 
     /**
      * The identifying name for the default log that could be used to trace
      * Tombola matches
      */
-    public static final String DEFAULT_GAME_LOGGER = "DefaultGameLog";
+    public static final String DEFAULT_GAME_LOGGER = "DefaultTGameLogger";
 
     /**
      * The identifying name for the default log that could be used to trace
      * SetFactory activities during card series generation.
      */
-    public static final String DEFAULT_FACTORY_LOGGER = "DefaulFactoryLog";
+    public static final String DEFAULT_FACTORY_LOGGER = "DefaulTSetFactoryLogger";
 
     /**
      * The identifying name of a simple log sending its messages to the standard
      * output
      */
-    public static final String STANDARD_OUTPUT_LOGGER = "StandardOutputLog";
+    public static final String STANDARD_OUTPUT_LOGGER = "StandardOutputLogger";
 
     /**
      * The identifying name of a simple log sending its messages to the standard
      * error
      */
-    public static final String STANDARD_ERROR_LOGGER = "StandardErrorLog";
+    public static final String STANDARD_ERROR_LOGGER = "StandardErrorLogger";
 
     /**
      * Just a nostalgic /dev/nul log
      */
-    public static final String NULL_LOGGER = "NullLog";
+    public static final String NULL_LOGGER = "NullLogger";
 
     private static Map<String, TSimpleLogger> loggers = new HashMap<>();
     private DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
     private String loggerName;
     private TLogLevel logLevel;
-    private String logFileName;
     private PrintStream logStream;
+    
+    /**
+     * Return the identifying name of this logger object
+     * 
+     * @return the identifying name of this logger object 
+     */
+    public String getName() {
+        return this.loggerName;
+    }
 
     /**
      * Return the finest level of log messages that are currently logged by this
@@ -198,7 +206,6 @@ public class TSimpleLogger implements ILogger {
         }
         if (msgLevel.ordinal() <= this.logLevel.ordinal()) {
             StringBuilder sb = new StringBuilder("[");
-            //TODO(2.0) capise se si può fare di meglio per customizzare il messaggio di Log...
             sb.append(ZonedDateTime.now().format(dt_formatter));
             sb.append("] [").append(msgLevel).append("] [").append(message).append("]");
             logStream.println(sb.toString());
@@ -206,23 +213,27 @@ public class TSimpleLogger implements ILogger {
     }
 
     /**
-     * TODO(1.1) Write comment here.
-     * @param level
-     * @param gameId
-     * @param count
-     * @param extracted
-     * @param msg 
+     * Helper method interface that allows for "separate fields" log entries to be
+     * written specially by TGame objects during tombola matches, for instance on
+     * database tables storing each info in separate table columns.
+     *
+     * @param level the provided message level
+     * @param gameId the String identifying the game that is producing the log entry
+     * @param count typically the counter indicating how many number have been already extracted
+     *              during the game.
+     * @param extractedNum the last number extracted during the tombola game.
+     * @param msg the String message to log
      */
     @Override
-    public void gameLog(TLogLevel level, String gameId, int count, int extracted, String msg) {
+    public void gameLog(TLogLevel level, String gameId, int count, int extractedNum, String msg) {
         if (logStream == null) {
             return;
         }
         if (level.ordinal() <= this.logLevel.ordinal()) {
-        // [Timestamp] [level] [gameid] [counter] [extracted] [message]
+            // [Timestamp] [level] [gameid] [counter] [extracted] [message]
             String logEntry = String.format("[%s] [%s] [%s] [%2d] [%2d] [%s]",
                     ZonedDateTime.now().format(dt_formatter), level, gameId, count,
-                    extracted, msg);
+                    extractedNum, msg);
             logStream.println(logEntry);
         }
     }
@@ -266,7 +277,7 @@ public class TSimpleLogger implements ILogger {
 
     /**
      * Use this method to prepare a new logger object that can be used by all
-     * other TombolaLib major protagonists, such as {@linkplain ISetFactory} or
+     * other TombolaLib major protagonists, such as {@linkplain ITSetFactory} or
      * {@linkplain TGame} objects.
      *
      * @param logName the name to uniquely identify the logger object
@@ -282,7 +293,7 @@ public class TSimpleLogger implements ILogger {
 
     /**
      * Use this method to prepare a new logger object that can be used by all
-     * other TombolaLib major protagonists, such as {@linkplain ISetFactory} or
+     * other TombolaLib major protagonists, such as {@linkplain ITSetFactory} or
      * {@linkplain TGame} objects.
      *
      * @param logName the name to uniquely identify the logger object
@@ -309,7 +320,7 @@ public class TSimpleLogger implements ILogger {
     // --- Private zone ------------------------------------------------------------
     private TSimpleLogger(String name, TLogLevel level, String fileName) throws FileNotFoundException {
         if (name == null || name.length() < 1) {
-            throw new TTombolaRuntimeException("<FATAL!> Tlogger name must be not null and not empty.");
+            throw new TTombolaRuntimeException("<FATAL!> TLogger name must be not null and not empty.");
         }
         this.loggerName = name;
         this.logLevel = ((level == null) ? TLogLevel.VER : level);

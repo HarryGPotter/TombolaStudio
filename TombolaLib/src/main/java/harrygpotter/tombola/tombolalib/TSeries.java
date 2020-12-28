@@ -27,7 +27,7 @@ package harrygpotter.tombola.tombolalib;
  * @author Harry G. Potter harry.g.potter@gmail.com
  * @version 1.1
  * @see TMakeSix
- * @see ISetFactory
+ * @see ITSetFactory
  * @since 1.8
  */
 public class TSeries {
@@ -156,9 +156,9 @@ public class TSeries {
      * requires that each single card is well formed by itself (see
      * {@linkplain TCard#checkConformity()}).
      *
-     * @return -1 if there ane no equal numbers between cards, the index, between
-     * 0 and 5, of the first card of the series having at least one number equal to
-     * a number in another card.
+     * @return -1 if there ane no equal numbers between cards, the index,
+     * between 0 and 5, of the first card of the series having at least one
+     * number equal to a number in another card.
      */
     public int verifySeries() {
         for (int i = 0; i < 6; i++) {

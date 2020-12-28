@@ -21,24 +21,24 @@ package harrygpotter.tombola.tombolalib;
 /**
  * Simple (maybe too simple in this release) interface used by other TombolaLib
  * objects to trace their activities both during the card series generation
- * phase (ISetFactory objects) and the simulated/assisted tombola games (TGame
+ * phase (ITSetFactory objects) and the simulated/assisted tombola games (TGame
  * objects).&nbsp;An interface is used to let TombolaLib users to provide their
- * custom implementation of ILogger objects.&nbsp;Currently the library provide
+ custom implementation of ITLogger objects.&nbsp;Currently the library provide
  * a first practical implementation (see {@linkplain TSimpleLogger}) to log on
  * plain text files or on standard console output.
  *
  * @author Harry G. Potter harry.g.potter@gmail.com
  * @version 1.1
  * @since 1.8
- * @see ISetFactory
+ * @see ITSetFactory
  * @see TGame
  * @see TSimpleLogger
  */
-public interface ILogger {
+public interface ITLogger {
 
     /**
      * As usual, define the discrete "levels" of importance for messages passed
-     * to Ilogger instances, in order to prioritize them and decide if they must
+     * to ITlogger instances, in order to prioritize them and decide if they must
      * be logged or not based on the log level set for each logger.
      */
     public static enum TLogLevel {
@@ -46,8 +46,8 @@ public interface ILogger {
     }
 
     /**
-     * Change the level for this ILogger objects: only messages with a TLogLevel
-     * higher or equal to the TLogLevel of the ILogger will be written/traced.
+     * Change the level for this ITLogger objects: only messages with a TLogLevel
+     * higher or equal to the TLogLevel of the ITLogger will be written/traced.
      *
      * @param level maximum level of messages that will be traced by this logger
      * object.
@@ -58,7 +58,7 @@ public interface ILogger {
      * Return the "level" up to the log messages passed to this logger will be
      * traced (that is, saved on a file, printed, stored on a database).
      *
-     * @return the current LogLevel set for this ILogger object
+     * @return the current LogLevel set for this ITLogger object
      */
     TLogLevel getLevel();
 
@@ -112,15 +112,19 @@ public interface ILogger {
      * @param msg The text message you want to log.
      */
     void log(TLogLevel level, String msg);
-    
-    /**
-     * TODO(1.1) Write comments here
-     * @param level
-     * @param gameId
-     * @param count
-     * @param extracted
-     * @param msg 
-     */
-    void gameLog(TLogLevel level, String gameId, int count, int extracted, String msg);
 
-}           // End Of File - Rel.(1.1)
+    /**
+     * Helper method interface that allows for "separate fields" log entries to be
+     * written specially by TGame objects during tombola matches, for instance on
+     * database tables storing each info in separate table columns.
+     *
+     * @param level the provided message level
+     * @param gameId the String identifying the game that is producing the log entry
+     * @param count typically the counter indicating how many number have been already extracted
+     *              during the game.
+     * @param extractedNum the last number extracted during the tombola game.
+     * @param msg the String message to log
+     */
+    void gameLog(TLogLevel level, String gameId, int count, int extractedNum, String msg);
+
+}   // End Of File - Rel.(1.1)

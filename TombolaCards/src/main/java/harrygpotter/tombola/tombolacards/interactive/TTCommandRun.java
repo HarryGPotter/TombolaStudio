@@ -18,13 +18,13 @@
  */
 package harrygpotter.tombola.tombolacards.interactive;
 
-import harrygpotter.tombola.tombolalib.ILogger;
-import harrygpotter.tombola.tombolalib.ISetFactory;
 import harrygpotter.tombola.tombolalib.TMakeSix;
 import harrygpotter.tombola.tombolalib.TSeriesList;
 import harrygpotter.tombola.tombolalib.TTombolaRuntimeException;
 import harrygpotter.tombola.tombolalib.TUtils;
 import java.util.StringTokenizer;
+import harrygpotter.tombola.tombolalib.ITSetFactory;
+import harrygpotter.tombola.tombolalib.ITLogger;
 
 /**
  * This class, used when TombolaCards is in interactive mode, implements the
@@ -49,8 +49,8 @@ public class TTCommandRun extends TTAbstractCommand {
      */
     @Override
     public int execute(StringTokenizer st) {
-        ILogger logger = (ILogger) internals.get("logger");
-        ISetFactory isf = (ISetFactory) internals.get("setFactory");
+        ITLogger logger = (ITLogger) internals.get("logger");
+        ITSetFactory isf = (ITSetFactory) internals.get("setFactory");
         echo("Preparing the series set factory...\n");
         if (isf == null) {
             // SetFactory has not been initialized yet, so this is the first run...
@@ -65,8 +65,8 @@ public class TTCommandRun extends TTAbstractCommand {
         isf.setMaxEqualPerRow((int) this.envMap.get("maxepr"));
         isf.setTimeLimit((long) this.envMap.get("timeLimit"));
         isf.setIterationsLimit((long) this.envMap.get("iteractionLimit"));
-        if (isf.getStatus() != ISetFactory.TStatus.STOPPED && isf.getStatus() != ISetFactory.TStatus.COMPLETED)
-            isf.setLogger((ILogger) this.internals.get("logger"));
+        if (isf.getStatus() != ITSetFactory.TStatus.STOPPED && isf.getStatus() != ITSetFactory.TStatus.COMPLETED)
+            isf.setLogger((ITLogger) this.internals.get("logger"));
         if (isf.getSeriesBuilder()==null) {
             TMakeSix builder;
             if (this.envMap.get("randomSeed") == null) {

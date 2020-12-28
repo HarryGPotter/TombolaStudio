@@ -88,19 +88,17 @@ public enum TCardFormat {
      * TODO(2.0) Still Unsupported
      */
     XML,
-    
     /**
      * TODO(2.0) Still Unsupported
      */
     SQL,
-    
     /**
-     * TODO(1.2) Write comment here
-     * The file aims to be ready to be used within a Microsoft Word template leveraging
-     * its "mail merge" functionalities. To achieve this goal the file has an heading line 
-     * with columns (fields) names, 27 numbers for each card (so, putting zeros where 
-     * there are no numbers on the matrix), no comment lines and use the real jolly 
-     * number instead of its index, without brackets.
+     * TODO(1.2) Write comment here The file aims to be ready to be used within
+     * a Microsoft Word template leveraging its "mail merge" functionalities. To
+     * achieve this goal the file has an heading line with columns (fields)
+     * names, 27 numbers for each card (so, putting zeros where there are no
+     * numbers on the matrix), no comment lines and use the real jolly number
+     * instead of its index, without brackets.
      */
     MSWORD_MAILMARGE
 }           // End Of File - Rel.(1.1)

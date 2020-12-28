@@ -127,7 +127,7 @@ public class THtmlPrinter {
         }
         int count = 0;
         Path templateToRead = Paths.get(templateFilePath);
-        try (BufferedReader br = Files.newBufferedReader(templateToRead, this.standard_charset)) {
+        try ( BufferedReader br = Files.newBufferedReader(templateToRead, this.standard_charset)) {
             String line;
             String parsedLine;
             StringBuilder headerTarget = new StringBuilder();
@@ -271,10 +271,10 @@ public class THtmlPrinter {
     public void setTineStampFormatter(String tsFormat) {
         this.ts_formatter = DateTimeFormatter.ofPattern(tsFormat);
     }
-    
+
     /**
      * Allow the highlights on printed paper of jolly numbers.
-     * 
+     *
      * @param highlightJolly true to apply jolly CSS styles to the number marked
      * as jolly on each card, false to suppress the highlight of jolly numbers.
      */
@@ -282,14 +282,17 @@ public class THtmlPrinter {
         this.highlightJolly = highlightJolly;
     }
 
-    /** 
-     * Return true is jolly are marked with a specific CSS style, false otherwise.
-     * 
-     * @return true is jolly are marked with a specific CSS style, false otherwise. 
+    /**
+     * Return true is jolly are marked with a specific CSS style, false
+     * otherwise.
+     *
+     * @return true is jolly are marked with a specific CSS style, false
+     * otherwise.
      */
     public boolean isJollyEnabled() {
         return this.highlightJolly;
     }
+
     // ----------------------------------------------------------------------
     // Prepare the initial "document scoped" tag-parameter couples that could be 
     //  potentially used within the template

@@ -260,14 +260,15 @@ public class TCardFormatter {
     public String cardToString(TCard card, TCardFormat format, boolean jollyOn) {
         return cardToString(card, -1, -1, format, jollyOn);
     }
+
     /**
-     * TODO(1.1) Write comment here
-     * This method has been added in a second moment to support SQL files. Maybe 
-     * the previous one can be deleted... please check.
-     * 
+     * TODO(1.1) Write comment here This method has been added in a second
+     * moment to support SQL files. Maybe the previous one can be deleted...
+     * please check.
+     *
      * @param card the TCard object to be serialized in a string
-     * @param cardId     TODO(1.1) Write comment here
-     * @param cardSetId  TODO(1.1) Write comment here
+     * @param cardId TODO(1.1) Write comment here
+     * @param cardSetId TODO(1.1) Write comment here
      * @param format the format to be used to serialize the string
      * @param jollyOn true to highlight on the string the jolly number, false
      * otherwise
@@ -489,19 +490,19 @@ public class TCardFormatter {
         }
         return sb.toString();
     }
-    
+
     private String sqlStringFromCard(TCard card, int cardId, int cardSetId, boolean jollyOn, boolean extraInfo) {
         if (card == null) {
             return null;
         }
         StringBuilder sb = new StringBuilder();
-        
+
         sb.append("INSERT INTO `<db_name>`.`cards` (`CardID`, `Label`, `CardSetID`, `NumberString`, `Status`, `Checksum`, `MaxEPC`, `MAxEPR` ) VALUES (");
         sb.append(sql_field_delimiter).append(cardId).append(sql_field_delimiter).append(sql_delimiter).append(" ");
         sb.append(sql_field_delimiter).append(card.getLabel()).append(sql_field_delimiter).append(sql_delimiter).append(" ");
         sb.append(sql_field_delimiter).append(cardSetId).append(sql_field_delimiter).append(sql_delimiter).append(" ");
         String numbers = "";
-        for(int i = 0; i<15; i++) {
+        for (int i = 0; i < 15; i++) {
             numbers += card.getNumber(i) + csv_delimiter;
         }
         sb.append(sql_field_delimiter).append(numbers).append(sql_field_delimiter).append(sql_delimiter).append(" ");
@@ -571,7 +572,7 @@ public class TCardFormatter {
                         }
                     }
                 }
-                if (card.getNumber(i, j)>0) {
+                if (card.getNumber(i, j) > 0) {
                     sb.append(String.format(formatStr, card.getNumber(i, j))).append(" ");
                 } else {
                     sb.append("     ");

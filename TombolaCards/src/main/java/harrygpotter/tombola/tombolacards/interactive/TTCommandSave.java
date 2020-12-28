@@ -18,12 +18,12 @@
  */
 package harrygpotter.tombola.tombolacards.interactive;
 
-import harrygpotter.tombola.tombolalib.ISetFactory;
 import harrygpotter.tombola.tombolalib.TCardFormat;
 import harrygpotter.tombola.tombolalib.TFileFormatter;
 import harrygpotter.tombola.tombolalib.TSeriesList;
 import java.io.IOException;
 import java.util.StringTokenizer;
+import harrygpotter.tombola.tombolalib.ITSetFactory;
 
 /**
  * This class, used when TombolaCards is in interactive mode, implements the
@@ -58,8 +58,8 @@ public class TTCommandSave extends TTAbstractCommand {
             sResult = "<ERROR> There are no series of cards to save.";
             return -1;
         }
-        ISetFactory isf = (ISetFactory) internals.get("setFactory");        
-        if (isf !=null && isf.getStatus()==ISetFactory.TStatus.RUNNING) {
+        ITSetFactory isf = (ITSetFactory) internals.get("setFactory");        
+        if (isf !=null && isf.getStatus()==ITSetFactory.TStatus.RUNNING) {
             sResult = "<ERROR> The series generation process is still RUNNING. Please wait it finishes or use the STOP command before.";
             return -2;
         }

@@ -233,7 +233,7 @@ public class TFileFormatter {
         //  standard output or error?
         Path path = Paths.get(fileName);
         BufferedWriter bw = Files.newBufferedWriter(path, standard_charset, options);
-        if (!this.getSkipComments() && writeFmt != TCardFormat.MSWORD_MAILMARGE){
+        if (!this.getSkipComments() && writeFmt != TCardFormat.MSWORD_MAILMARGE) {
             bw.write(autoDetectSequence + TUtils.LIB_NAME + csv_delimiter + TUtils.LIB_VERSION + csv_delimiter + format + "\n");
             bw.write(commentPrefix + "\n");
             bw.write(String.format("%s %s %s%n", commentPrefix, TUtils.LIB_NAME, TUtils.LIB_VERSION));
@@ -251,10 +251,10 @@ public class TFileFormatter {
         if (this.getUseHeader()) {
             bw.write(tcf.prepareHeader(writeFmt) + "\n");
         }
-        
-        int cardSetIdentifier = 10000 + (new Random().nextInt(90)*1000);
+
+        int cardSetIdentifier = 10000 + (new Random().nextInt(90) * 1000);
         int cardCounter = cardSetIdentifier;
-        
+
         for (TSeries s : cardSet) {
             for (int l = 0; l < 6; l++) {
                 cardCounter++;  // This first card is numbered with 1.
@@ -296,9 +296,10 @@ public class TFileFormatter {
      * This method reads a list of series of cards from a file previously
      * created using
      * {@linkplain TFileFormatter#writeSeriesFile(String, TSeriesList, TCardFormat, OpenOption)}
-     * companion method on this class.&nbsp;It returns a {@linkplain TSeriesList}
-     * object ready to be managed by all other TombolaLib classes and methods.&nbsp;
-     * File format is automatically determined using tags on the file header lines.
+     * companion method on this class.&nbsp;It returns a
+     * {@linkplain TSeriesList} object ready to be managed by all other
+     * TombolaLib classes and methods.&nbsp; File format is automatically
+     * determined using tags on the file header lines.
      *
      * @param fileName String containing the full or absolute path and file name
      * to read
@@ -359,7 +360,7 @@ public class TFileFormatter {
         TCardFormatter fmt = new TCardFormatter(format, this.getUseJolly(), this.getCsvDelimiter());
         while ((line = br.readLine()) != null) {
             // Here line is not null for sure
-            if (!line.startsWith(commentPrefix) && line.length()>0) {
+            if (!line.startsWith(commentPrefix) && line.length() > 0) {
                 TCard newCard = null;
                 try {
                     newCard = fmt.stringToCard(line);
@@ -383,7 +384,7 @@ public class TFileFormatter {
                     TSeries newSeriesObj = new TSeries(tempSeries);
                     int errorInSeries = newSeriesObj.verifySeries();
                     if (errorInSeries > -1) {
-                        throw new TTombolaRuntimeException("[ERROR] Read cards do not form a correct series of six cards. Error in card ["+errorInSeries+"].");
+                        throw new TTombolaRuntimeException("[ERROR] Read cards do not form a correct series of six cards. Error in card [" + errorInSeries + "].");
                     };
                     set.add(newSeriesObj);
                     tempSeries = new TCard[6];

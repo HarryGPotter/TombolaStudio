@@ -32,7 +32,7 @@ package harrygpotter.tombola.tombolalib;
  * @see TAbstractSetFactory
  * @since 1.8
  */
-public interface ISetFactory extends Runnable {
+public interface ITSetFactory extends Runnable {
 
     /**
      * Set the minimum value allowed for the "max equal number between cards"
@@ -254,17 +254,17 @@ public interface ISetFactory extends Runnable {
      *
      * @param logger the logger that the factory will use to trace its
      * activities
-     * @see ILogger
+     * @see ITLogger
      */
-    void setLogger(ILogger logger);
+    void setLogger(ITLogger logger);
 
     /**
-     * Return the current ILogger object used by the factory to communicate
-     * progresses and errors during the card generation process.
+     * Return the current ITLogger object used by the factory to communicate
+ progresses and errors during the card generation process.
      *
-     * @return the current ILogger object used by the factory
+     * @return the current ITLogger object used by the factory
      */
-    ILogger getLogger();
+    ITLogger getLogger();
 
     /**
      * Invoke this method to start the generation process after you set all

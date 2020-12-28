@@ -18,8 +18,8 @@
  */
 package harrygpotter.tombola.tombolacards.interactive;
 
-import harrygpotter.tombola.tombolalib.ISetFactory;
 import java.util.StringTokenizer;
+import harrygpotter.tombola.tombolalib.ITSetFactory;
 
 /**
  * This class, used when TombolaCards is in interactive mode, implements the "EXIT" 
@@ -31,8 +31,8 @@ import java.util.StringTokenizer;
  */
 public class TTCommandExit extends TTAbstractCommand {
     public int execute(StringTokenizer st) {
-        ISetFactory isf = (ISetFactory) internals.get("setFactory");
-        if (isf!=null && isf.getStatus() == ISetFactory.TStatus.RUNNING) {
+        ITSetFactory isf = (ITSetFactory) internals.get("setFactory");
+        if (isf!=null && isf.getStatus() == ITSetFactory.TStatus.RUNNING) {
             echo("<WARNING!> The series set factory is currently RUNNING. You should not quit the program now.\n");
             echo("           Please, wait the generation process ends or STOP its execution first.\n");
             return -1;

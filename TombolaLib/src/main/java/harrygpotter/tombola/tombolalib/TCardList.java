@@ -76,5 +76,42 @@ public class TCardList extends ArrayList<TCard> {
     public void resetGameStatus() {
         this.forEach(c -> c.resetGameStatus());
     }
+    
+    /**
+     * Add to this TCardList all cards contained in the TCardList passed as
+     * argument.&nbsp;For example, you can use this method to add billboard cards
+     * before pass the list to a TGame object, letting also billboard cards to 
+     * participate to awards assignment process.
+     * 
+     * @param otherCards TCardList containing cards to add
+     * 
+     * @return true is the list object has been modified, even partially, false
+     * if for some reason no card has been added at all.
+     * 
+     * @see TBillboardCard#getWholeBillboard(String) 
+     */
+    public boolean addCardList(TCardList otherCards) {
+        boolean result = false;
+        for(TCard c : otherCards) {
+            result |= this.add(c);
+        }
+        return result;
+    }
 
+    /**
+     * Helper method that let you remove a whole subset of cards from this 
+     * TCardList collection.
+     * 
+     * @param otherCards TCardList containing cards to remove
+     * 
+     * @return true is the list object has been modified, even partially, false
+     * if for some reason no card has been removed at all.
+     */
+    public boolean removeCardList(TCardList otherCards) {
+        boolean result = false;
+        for(TCard c : otherCards) {
+            result |= this.remove(c);
+        }
+        return result;
+    }
 }           // End Of File - Rel.(1.1)

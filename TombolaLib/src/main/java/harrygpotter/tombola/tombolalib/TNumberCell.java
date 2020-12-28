@@ -62,18 +62,17 @@ public class TNumberCell {
     public void setJolly(boolean jolly) {
         this.jolly = jolly;
     }
-    
+
     public boolean isEmpty() {
         return (number < 1 || number > 90);
     }
-    
+
     /**
-     * Return an helper string to use as class styles tags to render Card Number in 
-     * html pages using CSS styles. Returned class styles name are:
-     *  emptyNum
-     *  cardNum
-     *  matchedNum
-     * @return 
+     * Return an helper string to use as class styles tags to render Card Number
+     * in html pages using CSS styles. Returned class styles name are: emptyNum
+     * cardNum matchedNum
+     *
+     * @return the String containing CSS class name to style the number during a tombola game
      */
     public String getStyleClasses() {
         String styles;

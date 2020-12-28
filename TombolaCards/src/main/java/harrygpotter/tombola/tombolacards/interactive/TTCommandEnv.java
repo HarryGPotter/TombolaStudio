@@ -19,9 +19,9 @@
 package harrygpotter.tombola.tombolacards.interactive;
 
 import java.util.StringTokenizer;
-import harrygpotter.tombola.tombolalib.ISetFactory;
 import harrygpotter.tombola.tombolalib.TSeriesList;
 import java.util.Arrays;
+import harrygpotter.tombola.tombolalib.ITSetFactory;
 
 /**
  * This class, used when TombolaCards is in interactive mode, implements the
@@ -59,7 +59,7 @@ public class TTCommandEnv extends TTAbstractCommand {
             System.out.println();
 
             TSeriesList tsl = (TSeriesList) this.internals.get("seriesList");
-            ISetFactory isf = (ISetFactory) this.internals.get("setFactory");
+            ITSetFactory isf = (ITSetFactory) this.internals.get("setFactory");
 
             System.out.printf(" There are %d series in memory.\n", tsl.size());
             if (isf != null) {

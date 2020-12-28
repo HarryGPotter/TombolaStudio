@@ -18,8 +18,8 @@
  */
 package harrygpotter.tombola.tombolacards.interactive;
 
-import harrygpotter.tombola.tombolalib.ISetFactory;
 import java.util.StringTokenizer;
+import harrygpotter.tombola.tombolalib.ITSetFactory;
 
 /**
  * This class, used when TombolaCards is in interactive mode, implements the
@@ -34,8 +34,8 @@ public class TTCommandStop extends TTAbstractCommand {
 
     @Override
     public int execute(StringTokenizer st) {
-        ISetFactory isf = (ISetFactory) this.internals.get("setFactory");
-        if (isf != null && isf.getStatus()== ISetFactory.TStatus.RUNNING) {
+        ITSetFactory isf = (ITSetFactory) this.internals.get("setFactory");
+        if (isf != null && isf.getStatus()== ITSetFactory.TStatus.RUNNING) {
             isf.requestStop();
             sResult = "<!> OK, Generation Stop has been requested.\n<< Check the status of the process using STATUS command.\n<< You can re-start the processing using RUN Command.";
             return 0;

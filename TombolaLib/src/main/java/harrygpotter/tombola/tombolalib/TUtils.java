@@ -71,19 +71,19 @@ public class TUtils {
     public static final String[] AVAILABLE_GENERATION_METHODS = {"RANDOM", "PROGRESSIVE"};
 
     /**
-     * Return an ISetFactory interface implementing object providing the list of
-     * series of card generation algorithm indicated by the name in
-     * input.&nbsp;Available algorithms are listed within the
+     * Return an ITSetFactory interface implementing object providing the list of
+ series of card generation algorithm indicated by the name in
+ input.&nbsp;Available algorithms are listed within the
      * {@linkplain TUtils#AVAILABLE_GENERATION_METHODS} public array.
      *
      * @param factoryType the symbolic name used to identify the type of the
      * desired card series factory
-     * @return an ISetFactory interface implementing object providing the list
-     * of series of card generation algorithm indicated by the name in input.
+     * @return an ITSetFactory interface implementing object providing the list
+ of series of card generation algorithm indicated by the name in input.
      *
      * @see TUtils#AVAILABLE_GENERATION_METHODS
      */
-    public static ISetFactory getSetFactoryByType(String factoryType) {
+    public static ITSetFactory getSetFactoryByType(String factoryType) {
         // TODO(2.0) Figure out a better way to manage factory types availability/creation
         // What about to use a string to be used with Class.forName()???
         switch (factoryType) {

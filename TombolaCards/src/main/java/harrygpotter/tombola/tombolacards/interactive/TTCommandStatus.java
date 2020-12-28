@@ -18,11 +18,11 @@
  */
 package harrygpotter.tombola.tombolacards.interactive;
 
-import harrygpotter.tombola.tombolalib.ISetFactory;
 import harrygpotter.tombola.tombolalib.TMakeSix;
 import harrygpotter.tombola.tombolalib.TSeriesList;
 import harrygpotter.tombola.tombolalib.TUtils;
 import java.util.StringTokenizer;
+import harrygpotter.tombola.tombolalib.ITSetFactory;
 
 /**
  * This class, used when TombolaCards is in interactive mode, implements the "STATUS" 
@@ -37,11 +37,11 @@ public class TTCommandStatus extends TTAbstractCommand {
     
     @Override
     public int execute(StringTokenizer st) {
-        ISetFactory isf = (ISetFactory) internals.get("setFactory");
+        ITSetFactory isf = (ITSetFactory) internals.get("setFactory");
         if (isf != null) {
             echo("\n");
             echo("<-> Generation algorithm " + isf.getMethodName()+" is "+isf.getStatus()+".\n");
-            if (isf.getStatus() == ISetFactory.TStatus.RUNNING) {
+            if (isf.getStatus() == ITSetFactory.TStatus.RUNNING) {
                 echo(String.format("<-> Time elapsed: %s\n", TUtils.prettyMilliseconds(isf.getElapsedMillisecs())));
                 echo(String.format("<-> Limit at: %s (now at %3.1f%%)\n", TUtils.prettyMilliseconds(isf.getTimeLimit()),(((float) isf.getElapsedMillisecs())/isf.getTimeLimit())));
             }
